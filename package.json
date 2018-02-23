@@ -1,0 +1,47 @@
+{
+  "name": "oai-pmh-provider",
+  "version": "1.0.0",
+  "description": "An OAI-PMH provider.",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd build && node main",
+    "compile": "node build.js && backpack build",
+    "dev": "node build.js && backpack dev | pino -o 'short'",
+    "test": "node build.js && mocha test/**/*.ts --exit"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.104",
+    "@types/mysql": "^2.15.2",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "lodash": "^4.17.5",
+    "mysql": "^2.15.0",
+    "pino": "^4.7.3",
+    "sequelize": "^4.33.4",
+    "source-map-support": "^0.4.15",
+    "swagger-express-middleware": "^1.0.0-alpha.12",
+    "xml": "^1.0.1",
+    "xmldom": "^0.1.27",
+    "xo": "^0.18.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.20",
+    "@types/chai": "^4.1.2",
+    "@types/express": "^4.0.35",
+    "@types/mocha": "^2.2.48",
+    "@types/pino": "^4.7.1",
+    "awesome-typescript-loader": "^3.4.1",
+    "backpack-core": "^0.4.3",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "shelljs": "^0.7.8",
+    "supertest": "^3.0.0",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.3.2",
+    "typescript": "^2.7.2"
+  },
+  "author": "Carmine DiMascio <cdimascio@gmail.com> (https://github.com/cdimascio)"
+}
