@@ -12,8 +12,9 @@ export class OaiDcMapper {
     public static mapOaiDcListRecords(records: any[], verb: string): any {
 
         const list = [];
-        const response = {};
-        response[verb] = [];
+        const response = {
+            ListRecords: <any>[]
+        };
 
         for (let record of records) {
 
@@ -51,7 +52,7 @@ export class OaiDcMapper {
             list.push(item);
         }
 
-        response[verb] = list;
+        response.ListRecords = list;
 
         return response;
 

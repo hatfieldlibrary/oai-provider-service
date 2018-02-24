@@ -34,18 +34,7 @@ import * as url from 'url';
 import * as xml from 'xml';
 import logger from "../../common/logger";
 
-const EXCEPTIONS = {
-    badArgument: 'Illegal recordsQuery parameter',
-    badResumptionToken: 'The resumption token is invalid',
-    badVerb: 'Illegal OAI verb',
-    cannotDisseminateFormat: 'The metadata format identified by the value given for the metadataPrefix argument is ' +
-    'not supported by the item or by the repository.',
-    idDoesNotExist: 'The value of the identifier argument is unknown or illegal in this repository.',
-    noRecordsMatch: 'The combination of the values of the from, until, set and metadataPrefix arguments results in ' +
-    'an empty list.',
-    noMetadataFormats: 'There are no metadata formats available for the specified item.',
-    noSetHierarchy: 'The repository does not support sets.'
-};
+
 
 const responseTemplate = {
     'OAI-PMH': [
@@ -64,7 +53,7 @@ const responseTemplate = {
  * @param {object} req - A HTTP request object
  * @returns {string} - The parsed full recordsQuery URL
  */
-const parseFullUrl = req => {
+const parseFullUrl = (req: any) => {
     return url.format({
         protocol: req.protocol,
         host: req.get('host')
@@ -77,7 +66,7 @@ const parseFullUrl = req => {
  * @param {object} responseContent - The body of the response
  * @return {string} - Parsed XML response
  */
-function generateResponse(req, responseContent) {
+function generateResponse(req: any, responseContent: any) {
     const newResponse = JSON.parse(JSON.stringify(responseTemplate));
     newResponse['OAI-PMH'].push({request: [{_attr: req.query}, parseFullUrl(req)]});
     newResponse['OAI-PMH'].push(responseContent);
@@ -90,14 +79,16 @@ function generateResponse(req, responseContent) {
  * @param {string} code - The OAI-PMH error code
  * @return {string} - Parsed XML exception
  */
-const generateException = (req, code) => {
+const generateException = (req: any, code: string) => {
+
+
     /**
      * Validate the argument types.
      */
     if (req === undefined || code === undefined) {
         throw new Error(`Function arguments are missing: request ${req}, code: ${code}`);
     }
-    if (Object.keys(EXCEPTIONS).indexOf(code) === -1) {
+    if ( Exceptions.getException(code) === Exceptions.UNKNOWN_CODE) {
         throw new Error(`Unknown exception type: ${code}`);
     }
     if (!(req instanceof Object)) {
@@ -109,7 +100,8 @@ const generateException = (req, code) => {
 
     const newException = JSON.parse(JSON.stringify(responseTemplate));
     newException['OAI-PMH'].push({request: req.originalUrl});
-    newException['OAI-PMH'].push({error: [{_attr: {code}}, EXCEPTIONS[code]]});
+    const exception: string = Exceptions.getException(code);
+    newException['OAI-PMH'].push({error: [{_attr: {code}}, Exceptions.getException(code)]});
 
     return xml(newException, {declaration: true});
 };

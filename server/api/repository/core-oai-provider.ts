@@ -7,6 +7,12 @@ import {ERRORS, Record} from "./commons-oai-provider";
 import logger from "../../common/logger";
 import {OaiDcMapper} from "./oai-dc-mapper";
 
+interface Formats {
+    prefix: string;
+    schema: string;
+    namespace: string;
+}
+
 export class OaiProviderRepository {
 
     // Singleton of the core oai module. This module validates
@@ -21,7 +27,7 @@ export class OaiProviderRepository {
         this.parameters = this.backendModule.getParameters();
     }
 
-    private hasKey(object, key): boolean {
+    private hasKey(object: object, key: string): boolean {
         return Object.prototype.hasOwnProperty.call(object, key);
     }
 
@@ -50,7 +56,7 @@ export class OaiProviderRepository {
                 if (queryParameters.length > 1) {
                     res.send(generateException(req, 'badArgument'));
                 } else {
-                    this.backendModule.getProvider().getCapabilities().then(capabilities => {
+                    this.backendModule.getProvider().getCapabilities().then((capabilities: any) => {
                         const responseContent = {
                             Identify: [
                                 {repositoryName: this.parameters.repositoryName},
@@ -76,9 +82,9 @@ export class OaiProviderRepository {
                     res.send(generateException(req, 'badArgument'));
                 } else {
                     const args = this.hasKey(req.query, 'identifier') ? req.query.identifier : undefined;
-                    this.backendModule.getProvider().getMetadataFormats(args).then(formats => {
+                    this.backendModule.getProvider().getMetadataFormats(args).then((formats: any[]) => {
                         const responseContent = {
-                            ListMetadataFormats: formats.map(format => {
+                            ListMetadataFormats: formats.map((format: Formats) => {
                                 return {
                                     metadataFormat: [
                                         {metadataPrefix: format.prefix},
@@ -155,17 +161,19 @@ export class OaiProviderRepository {
                 } else {
                     try {
                         this.backendModule.getProvider().getRecords()
-                            .then(result => {
+                            .then((result: any) => {
                                 try {
                                     const mapped = OaiDcMapper.mapOaiDcListRecords(result, req.query.verb);
+                                    this.backendModule.getProvider().closeConnection().then(() =>
+                                        logger.debug('Database connection closed.'));
                                     res.send(generateResponse(req, mapped))
-                                } catch(err) {
+                                } catch (err) {
                                     logger.error(err);
                                     res.send(generateException(req, 'noRecordsMatch'));
                                 }
 
                             })
-                            .catch(err =>
+                            .catch((err: Error) =>
                                 logger.info(err))
 
                     } catch (err) {
@@ -188,11 +196,11 @@ export class OaiProviderRepository {
                     res.send(generateException(req, 'badArgument'));
                 } else {
                     this.backendModule.getProvider().getRecord(req.query.identifier, req.query.metadataPrefix)
-                        .then(record => {
+                        .then((record: any) => {
                             res.send(generateResponse(req, record));
                         })
-                        .catch(err => {
-                            res.send(generateException(req, findKey(ERRORS, err)));
+                        .catch((err: Error) => {
+                            res.send(generateException(req, findKey(ERRORS, 'badArgument')));
                         });
                 }
                 break;

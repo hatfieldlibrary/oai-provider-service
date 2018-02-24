@@ -83,6 +83,7 @@ export interface BackendProvider {
     getMetadataFormats: any;
     getIdentifiers: any;
     getRecord: any;
+    closeConnection: any;
 }
 
 export const HARVESTING_GRANULARITY = {
@@ -166,7 +167,7 @@ export function factory(options = {}): BackendProvider {
          * @param {string} metadataPrefix - xxx
          * @returns {Promise<record, number>} Resolves with a {@link record}
          */
-        getRecord: (identifier, metadataPrefix) => {
+        getRecord: (identifier: string, metadataPrefix: string) => {
             return Promise.reject(ERRORS.idDoesNotExist);
         },
 
@@ -210,7 +211,7 @@ export function factory(options = {}): BackendProvider {
          * @param {getRecordsParameters} parameters - xxx
          * @returns {Promise<getRecordsResponse, error>} Actual record metadata is not contained in the response
          */
-        getIdentifiers: parameters => {
+        getIdentifiers: (parameters: any) => {
             return Promise.reject(ERRORS.noRecordsMatch);
         },
         /**
@@ -223,9 +224,13 @@ export function factory(options = {}): BackendProvider {
          * @param {string} [resumptionToken] - Optional resumption token to get the next partition of records
          * @returns {Promise<getRecordsResponse, error>} An array of records
          */
-        getRecords: (parameters) => {
+        getRecords: (parameters: any) => {
             return mysql.recordsQuery();
 
+        },
+
+        closeConnection: () => {
+            return mysql.close();
         }
     });
 }

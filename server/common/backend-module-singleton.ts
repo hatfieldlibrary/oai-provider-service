@@ -12,7 +12,7 @@ export class BackendModule {
 
     MANDATORY_PARAMETERS = ['repositoryName', 'baseURL', 'adminEmail'];
     DEFAULT_PARAMETERS = {
-        port: 1337,
+        port: 3000,
         description: '',
         backendModule: {}
     };
@@ -24,14 +24,14 @@ export class BackendModule {
 
     private initParameters(parameters: Configuration): any {
 
-        const missingParameters = this.MANDATORY_PARAMETERS.filter(key => {
+        const missingParameters: string[] = this.MANDATORY_PARAMETERS.filter(key => {
             return !Object.hasOwnProperty.call(parameters, key);
         });
 
         if (missingParameters.length > 0) {
             throw new Error('Mandatory parameters missing: ' + missingParameters.join());
         } else {
-            parameters = Object.assign(JSON.parse(JSON.stringify(this.DEFAULT_PARAMETERS)),
+            parameters = (<any>Object).assign(JSON.parse(JSON.stringify(this.DEFAULT_PARAMETERS)),
                 JSON.parse(JSON.stringify(parameters)));
             const invalidParameters = Object.keys(parameters).filter(key => {
                 let result;

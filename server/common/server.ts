@@ -5,7 +5,6 @@ import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as os from 'os';
 import * as cookieParser from 'cookie-parser';
-import swaggerify from './swagger';
 import logger from './logger';
 
 const app = express();
@@ -21,12 +20,12 @@ export default class ExpressServer {
   }
 
   router(routes: (app: Application) => void): ExpressServer {
-    swaggerify(app, routes);
+    routes(app);
     return this;
   }
 
   listen(port: number = parseInt(process.env.PORT)): Application {
-    const welcome = port => () => logger.info(`up and running in ${process.env.NODE_ENV || 
+    const welcome = (port: number) => () => logger.info(`up and running in ${process.env.NODE_ENV || 
       'development'} @: ${os.hostname() } on port: ${port}}`);
     http.createServer(app).listen(port, welcome(port));
     return app;

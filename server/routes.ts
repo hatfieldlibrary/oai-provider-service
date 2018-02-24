@@ -1,5 +1,6 @@
 import { Application } from 'express';
-import controllerRouter from './api/controllers/oai/router'
+import * as controller from "./api/controllers/oai/controller";
 export default function routes(app: Application): void {
-  app.use('/oai', controllerRouter);
+  // app.use('/oai', controllerRouter);
+  app.get('/oai', controller.oai);
 };
