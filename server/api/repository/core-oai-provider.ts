@@ -136,7 +136,25 @@ export class OaiProviderRepository {
                     (!Object.keys(req.query).every(key => possibleParams.indexOf(key) >= 0))) {
                     res.send(generateException(req, 'badArgument'));
                 } else {
-                    res.send(generateException(req, 'noRecordsMatch'));
+                    try {
+                        this.backendModule.getProvider().getIdentifiers(req.query)
+                            .then((result: any) => {
+                                try {
+                                    const mapped = OaiDcMapper.mapOaiDcListIdentifiers(result);
+                                    res.send(generateResponse(req, mapped));
+                                } catch (err) {
+                                    logger.error(err);
+                                    res.send(generateException(req, 'noRecordsMatch'));
+                                }
+
+                            })
+                            .catch((err: Error) =>
+                                logger.info(err))
+
+                    } catch (err) {
+                        throw new Error(err);
+                    }
+
                 }
                 break;
             case 'ListRecords':
@@ -160,12 +178,10 @@ export class OaiProviderRepository {
                     res.send(generateException(req, 'badArgument'));
                 } else {
                     try {
-                        this.backendModule.getProvider().getRecords()
+                        this.backendModule.getProvider().getRecords(req.query)
                             .then((result: any) => {
                                 try {
-                                    const mapped = OaiDcMapper.mapOaiDcListRecords(result, req.query.verb);
-                                    this.backendModule.getProvider().closeConnection().then(() =>
-                                        logger.debug('Database connection closed.'));
+                                    const mapped = OaiDcMapper.mapOaiDcListRecords(result);
                                     res.send(generateResponse(req, mapped))
                                 } catch (err) {
                                     logger.error(err);
@@ -197,10 +213,13 @@ export class OaiProviderRepository {
                 } else {
                     this.backendModule.getProvider().getRecord(req.query.identifier, req.query.metadataPrefix)
                         .then((record: any) => {
-                            res.send(generateResponse(req, record));
+                                const mapped = OaiDcMapper.mapOaiDcGetRecord(record);
+                                res.send(generateResponse(req, mapped));
+
                         })
                         .catch((err: Error) => {
-                            res.send(generateException(req, findKey(ERRORS, 'badArgument')));
+                            res.send(generateException(req, 'noRecordsMatch'));
+                            logger.info(err)
                         });
                 }
                 break;

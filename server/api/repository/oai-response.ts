@@ -32,9 +32,8 @@
 
 import * as url from 'url';
 import * as xml from 'xml';
+import * as exceptions from './exceptions';
 import logger from "../../common/logger";
-
-
 
 const responseTemplate = {
     'OAI-PMH': [
@@ -88,7 +87,7 @@ const generateException = (req: any, code: string) => {
     if (req === undefined || code === undefined) {
         throw new Error(`Function arguments are missing: request ${req}, code: ${code}`);
     }
-    if ( Exceptions.getException(code) === Exceptions.UNKNOWN_CODE) {
+    if ( exceptions.Exceptions.getException(code) === exceptions.Exceptions.UNKNOWN_CODE) {
         throw new Error(`Unknown exception type: ${code}`);
     }
     if (!(req instanceof Object)) {
@@ -100,8 +99,7 @@ const generateException = (req: any, code: string) => {
 
     const newException = JSON.parse(JSON.stringify(responseTemplate));
     newException['OAI-PMH'].push({request: req.originalUrl});
-    const exception: string = Exceptions.getException(code);
-    newException['OAI-PMH'].push({error: [{_attr: {code}}, Exceptions.getException(code)]});
+    newException['OAI-PMH'].push({error: [{_attr: {code}}, exceptions.Exceptions.getException(code)]});
 
     return xml(newException, {declaration: true});
 };

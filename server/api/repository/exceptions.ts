@@ -1,6 +1,6 @@
 
 
-class Exceptions  {
+export class Exceptions  {
 
     static badArgument: string = 'Illegal recordsQuery parameter';
     static badResumptionToken: string = 'The resumption token is invalid';

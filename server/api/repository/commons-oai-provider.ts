@@ -87,13 +87,13 @@ export interface BackendProvider {
 }
 
 export const HARVESTING_GRANULARITY = {
-    DATE: 0,
-    DATETIME: 1
+    DATE: 'YYYY-MM-DD',
+    DATETIME: 'YYYY-MM-DDThh:mm:ssZ'
 };
 export const DELETED_RECORDS_SUPPORT = {
-    NO: 0,
-    TRANSIENT: 1,
-    PERSISTENT: 2
+    NO: 'no',
+    TRANSIENT: 'transient',
+    PERSISTENT: 'persistent'
 };
 export const ERRORS = {
     badArgument: 0,
@@ -157,7 +157,7 @@ export function factory(options = {}): BackendProvider {
         getCapabilities: () => {
             return Promise.resolve({
                 deletedRecordsSupport: DELETED_RECORDS_SUPPORT.NO,
-                harvestingGranularity: HARVESTING_GRANULARITY.DATE,
+                harvestingGranularity: HARVESTING_GRANULARITY.DATETIME,
                 earliestDatestamp: new Date()
             });
         },
@@ -168,7 +168,7 @@ export function factory(options = {}): BackendProvider {
          * @returns {Promise<record, number>} Resolves with a {@link record}
          */
         getRecord: (identifier: string, metadataPrefix: string) => {
-            return Promise.reject(ERRORS.idDoesNotExist);
+            return mysql.getRecord(identifier);
         },
 
         /**
@@ -212,7 +212,7 @@ export function factory(options = {}): BackendProvider {
          * @returns {Promise<getRecordsResponse, error>} Actual record metadata is not contained in the response
          */
         getIdentifiers: (parameters: any) => {
-            return Promise.reject(ERRORS.noRecordsMatch);
+            return mysql.identifiersQuery(parameters);
         },
         /**
          * @typedef {function} getRecords
@@ -225,7 +225,7 @@ export function factory(options = {}): BackendProvider {
          * @returns {Promise<getRecordsResponse, error>} An array of records
          */
         getRecords: (parameters: any) => {
-            return mysql.recordsQuery();
+            return mysql.recordsQuery(parameters);
 
         },
 

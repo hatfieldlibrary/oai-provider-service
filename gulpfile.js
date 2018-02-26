@@ -6,7 +6,8 @@ gulp.task("build", function () {
         .pipe(ts({
             noImplicitAny: true,
             target: "es6",
-            module: "commonjs"
+            module: "commonjs",
+
         })).pipe(gulp.dest("dist"));
 });
 
