@@ -149,7 +149,7 @@ export class OaiProviderRepository {
 
                             })
                             .catch((err: Error) =>
-                                logger.info(err))
+                                logger.error(err))
 
                     } catch (err) {
                         throw new Error(err);
@@ -190,7 +190,7 @@ export class OaiProviderRepository {
 
                             })
                             .catch((err: Error) =>
-                                logger.info(err))
+                                logger.error(err))
 
                     } catch (err) {
                         throw new Error(err);
@@ -219,7 +219,7 @@ export class OaiProviderRepository {
                         })
                         .catch((err: Error) => {
                             res.send(generateException(req, 'noRecordsMatch'));
-                            logger.info(err)
+                            logger.error(err)
                         });
                 }
                 break;

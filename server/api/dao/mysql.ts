@@ -7,6 +7,9 @@ export class MysqlConnector {
     private connection: Connection;
     public static instance: MysqlConnector;
 
+    /**
+     * TODO: Move database configuration to file.
+     */
     private constructor() {
         this.connection = mysql.createConnection({
             host: 'localhost',
@@ -43,7 +46,7 @@ export class MysqlConnector {
         } else {
             whereClause = " c.published = true ";
         }
-        logger.info(whereClause)
+        logger.debug(whereClause)
         return new Promise((resolve: any, reject: any) => {
             this.connection.query('Select c.updatedAt, c.title, c.description, c.url, c.id, c.restricted, ' +
                 'cr.title AS category FROM Collections c JOIN CategoryTargets ct on ct.CollectionId=c.id ' +
@@ -66,6 +69,7 @@ export class MysqlConnector {
             const from = this.connection.escape(parameters.from);
             query = "Select id, updatedAt FROM Collections WHERE published = true AND updatedAt >= '"
                 + from + "' AND updatedAt <= '" + until + "'";
+
         }
         else if (parameters.from) {
             const from = this.connection.escape(parameters.from);
@@ -73,6 +77,7 @@ export class MysqlConnector {
         } else {
             query = "Select id, updatedAt FROM Collections WHERE published = true ";
         }
+        logger.debug(query);
         return new Promise((resolve: any, reject: any) => {
             this.connection.query(query,
                 (err: Error, rows: any[]) => {
@@ -87,16 +92,17 @@ export class MysqlConnector {
 
     public getRecord(id: string): Promise<any> {
         return new Promise((resolve: any, reject: any) => {
-            this.connection.query('Select c.updatedAt, c.title, c.description, c.url, c.id, c.restricted, ' +
+            const query = 'Select c.updatedAt, c.title, c.description, c.url, c.id, c.restricted, ' +
                 'cr.title AS category FROM Collections c JOIN CategoryTargets ct on ct.CollectionId=c.id ' +
                 'JOIN Categories cr on ct.CategoryId=cr.id WHERE c.id=' +
-                this.connection.escape(id) + ' AND c.published = true',
+                this.connection.escape(id) + ' AND c.published = true';
+            logger.debug(query);
+            this.connection.query(query,
                 (err: Error, rows: any[]) => {
                     if (err) {
                         logger.debug(err);
                         return reject(err);
                     }
-                    logger.info(rows);
                     resolve(rows);
                 });
         });
