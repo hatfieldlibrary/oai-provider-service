@@ -6,6 +6,7 @@ import {findKey} from 'lodash';
 import {ERRORS, Record} from "./commons-oai-provider";
 import logger from "../../common/logger";
 import {OaiDcMapper} from "./oai-dc-mapper";
+import * as url from "url";
 
 interface Formats {
     prefix: string;
@@ -22,6 +23,9 @@ export class OaiProviderRepository {
     // for this server.
     parameters: Configuration;
 
+    const
+    possibleParams = ['verb', 'from', 'until', 'metadataPrefix', 'set', 'resumptionToken'];
+
     constructor() {
         this.backendModule = BackendModule.getInstance();
         this.parameters = this.backendModule.getParameters();
@@ -31,13 +35,17 @@ export class OaiProviderRepository {
         return Object.prototype.hasOwnProperty.call(object, key);
     }
 
-    public oai(req: Request, res: Response): any {
+    private getQueryParameters(query: any) {
+        return Object.keys(query).map(key => query[key]);
+    }
+
+    public oai(query: any): Promise<any> {
 
         res.set('Content-Type', 'text/xml');
         /**
          * All provided recordsQuery parameters are collected into the 'queryParameters' array.
          */
-        const queryParameters = Object.keys(req.query).map(key => req.query[key]);
+        //const queryParameters = Object.keys(req.query).map(key => req.query[key]);
 
         logger.debug("Query Parameters: " + queryParameters);
         logger.debug("req.query.verb: " + req.query.verb);
@@ -46,9 +54,11 @@ export class OaiProviderRepository {
         /**
          * A list of possible parameters that ListIdentifiers or ListRecords can take.
          */
-        const possibleParams = ['verb', 'from', 'until', 'metadataPrefix', 'set', 'resumptionToken'];
+
         switch (req.query.verb) {
             case 'Identify':
+
+
                 /**
                  * Parameters: none
                  * exceptions: badArgument
@@ -68,6 +78,7 @@ export class OaiProviderRepository {
                                 {granularity: capabilities.harvestingGranularity}
                             ]
                         };
+
                         res.send(generateResponse(req, responseContent));
                     });
                 }
@@ -213,8 +224,8 @@ export class OaiProviderRepository {
                 } else {
                     this.backendModule.getProvider().getRecord(req.query.identifier, req.query.metadataPrefix)
                         .then((record: any) => {
-                                const mapped = OaiDcMapper.mapOaiDcGetRecord(record);
-                                res.send(generateResponse(req, mapped));
+                            const mapped = OaiDcMapper.mapOaiDcGetRecord(record);
+                            res.send(generateResponse(req, mapped));
 
                         })
                         .catch((err: Error) => {
@@ -226,5 +237,89 @@ export class OaiProviderRepository {
             default:
                 res.send(generateException(req, 'badVerb'));
         }
+    }
+
+    listRecords(query: any, url: string, protocol: any, host: string): Promise<any> {
+        /**
+         * Parameters: from (optional),
+         * until (optional),
+         * metadataPrefix (required),
+         * set (optional),
+         * resumptionToken (exclusive)
+         *
+         * exceptions: badArgument,
+         * badResumptionToken,
+         * cannotDisseminateFormat,
+         * noRecordsMatch,
+         * noSetHierarchy
+         */
+        return new Promise((resolve: any, reject: any) => {
+            const queryParameters = this.getQueryParameters(query);
+            if ((queryParameters.length > 6 || queryParameters.length < 2) ||
+                (queryParameters.length === 2 && (!this.hasKey(query, 'metadataPrefix') &&
+                    !this.hasKey(query, 'resumptionToken'))) ||
+                (!Object.keys(query).every(key => this.possibleParams.indexOf(key) >= 0))) {
+                resolve(generateException(url, 'badArgument'));
+            } else {
+                try {
+                    if (queryParameters.length > 1) {
+                        resolve(generateException(url, 'badArgument'));
+                    }
+                    else {
+                        try {
+                            this.backendModule.getProvider().getRecords(query)
+                                .then((result: any) => {
+                                    try {
+                                        const mapped = OaiDcMapper.mapOaiDcListRecords(result);
+                                        resolve(generateResponse(query, url, protocol, host, mapped))
+                                    } catch (err) {
+                                        logger.error(err);
+                                        resolve(generateException(url, 'noRecordsMatch'));
+                                    }
+
+                                })
+                                .catch((err: Error) => {
+                                    logger.error(err);
+                                    reject(err)
+                                });
+
+                        } catch (err) {
+                            reject(err);
+                        }
+                    }
+                } catch (err) {
+                    reject(err)
+                }
+            }
+        });
+    }
+
+    identify(query: any, url: string, protocol: any, host: string): Promise<any> {
+        return new Promise((resolve: any, reject: any) => {
+            const queryParameters = this.getQueryParameters(query);
+            try {
+                if (queryParameters.length > 1) {
+                    resolve(generateException(url, 'badArgument'));
+                } else {
+                    this.backendModule.getProvider().getCapabilities().then((capabilities: any) => {
+                        const responseContent = {
+                            Identify: [
+                                {repositoryName: this.parameters.repositoryName},
+                                {baseURL: this.parameters.baseURL},
+                                {protocolVersion: this.parameters.protocolVersion},
+                                {adminEmail: this.parameters.adminEmail},
+                                {earliestDatestamp: capabilities.earliestDatestamp},
+                                {deletedRecord: capabilities.deletedRecordsSupport},
+                                {granularity: capabilities.harvestingGranularity}
+                            ]
+                        };
+
+                        resolve(generateResponse(query, url, protocol, host, responseContent));
+                    });
+                }
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 }

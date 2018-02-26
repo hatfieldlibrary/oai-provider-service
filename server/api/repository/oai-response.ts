@@ -52,11 +52,11 @@ const responseTemplate = {
  * @param {object} req - A HTTP request object
  * @returns {string} - The parsed full recordsQuery URL
  */
-const parseFullUrl = (req: any) => {
+const parseFullUrl = (originalUrl: string, protocol: string, host: string): string => {
     return url.format({
-        protocol: req.protocol,
-        host: req.get('host')
-    }) + req.originalUrl;
+        protocol: protocol,
+        host: host
+    }) + originalUrl;
 };
 
 /**
@@ -65,9 +65,9 @@ const parseFullUrl = (req: any) => {
  * @param {object} responseContent - The body of the response
  * @return {string} - Parsed XML response
  */
-function generateResponse(req: any, responseContent: any) {
+function generateResponse(verb: string, url: string, protocol: string, host: string, responseContent: any) {
     const newResponse = JSON.parse(JSON.stringify(responseTemplate));
-    newResponse['OAI-PMH'].push({request: [{_attr: req.query}, parseFullUrl(req)]});
+    newResponse['OAI-PMH'].push({request: [{_attr: verb}, parseFullUrl(url, protocol, host)]});
     newResponse['OAI-PMH'].push(responseContent);
     return xml(newResponse, {declaration: true});
 }
@@ -78,27 +78,19 @@ function generateResponse(req: any, responseContent: any) {
  * @param {string} code - The OAI-PMH error code
  * @return {string} - Parsed XML exception
  */
-const generateException = (req: any, code: string) => {
-
-
+const generateException = (url: string, code: string) => {
     /**
      * Validate the argument types.
      */
-    if (req === undefined || code === undefined) {
-        throw new Error(`Function arguments are missing: request ${req}, code: ${code}`);
+    if ( code === undefined) {
+        throw new Error(`Function arguments are missing:  code: ${code}`);
     }
     if ( exceptions.Exceptions.getException(code) === exceptions.Exceptions.UNKNOWN_CODE) {
         throw new Error(`Unknown exception type: ${code}`);
     }
-    if (!(req instanceof Object)) {
-        throw new TypeError(`Invalid request: ${req}`);
-    }
-    if (!Object.hasOwnProperty.call(req, 'originalUrl')) {
-        throw new Error(`No original URL provided in request: ${req}`);
-    }
 
     const newException = JSON.parse(JSON.stringify(responseTemplate));
-    newException['OAI-PMH'].push({request: req.originalUrl});
+    newException['OAI-PMH'].push({request: url});
     newException['OAI-PMH'].push({error: [{_attr: {code}}, exceptions.Exceptions.getException(code)]});
 
     return xml(newException, {declaration: true});
