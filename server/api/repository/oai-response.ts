@@ -1,62 +1,43 @@
-/**
+
+/*
+ * Copyright 2018 Willamette University
  *
- * @licstart  The following is the entire license notice for the JavaScript code in this file.
+ * This file is part of commons-oai-provider.
  *
- * Modular OAI-PMH server
+ * commons-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki, The National Library of Finland.
  *
- * Copyright (C) 2017 University Of Helsinki (The National Library Of Finland)
+ *     commons-oai-provider is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- * This file is part of oai-pmh-server
+ *     Foobar is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * oai-pmh-server program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * oai-pmh-server is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @licend  The above is the entire license notice
- * for the JavaScript code in this file.
- *
+ *     You should have received a copy of the GNU General Public License
+ *     along with commons-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable no-unused-vars */
-
-'use strict';
-
-import * as url from 'url';
 import * as xml from 'xml';
-import * as exceptions from './exceptions';
-import logger from "../../common/logger";
+import {ExceptionParams} from "./core-oai-provider";
+import {Exceptions} from "./exceptions";
 
 const responseTemplate = {
     'OAI-PMH': [
-        {_attr:
-                {xmlns: 'http://www.openarchives.org/OAI/2.0/',
+        {
+            _attr:
+                {
+                    xmlns: 'http://www.openarchives.org/OAI/2.0/',
                     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                     'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
                     'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/ ' +
-                    '\nhttp://www.openarchives.org/OAI/2.0/OAI-PMH.xsd'}
+                    '\nhttp://www.openarchives.org/OAI/2.0/OAI-PMH.xsd'
+                }
         },
         {responseDate: new Date().toISOString()}
-    ]};
-
-/**
- * Parse a full http request string.
- * @param {object} req - A HTTP request object
- * @returns {string} - The parsed full recordsQuery URL
- */
-const parseFullUrl = (originalUrl: string, protocol: string, host: string): string => {
-    return url.format({
-        protocol: protocol,
-        host: host
-    }) + originalUrl;
+    ]
 };
 
 /**
@@ -65,9 +46,9 @@ const parseFullUrl = (originalUrl: string, protocol: string, host: string): stri
  * @param {object} responseContent - The body of the response
  * @return {string} - Parsed XML response
  */
-function generateResponse(verb: string, url: string, protocol: string, host: string, responseContent: any) {
+function generateResponse(verb: string, url: string, responseContent: any) {
     const newResponse = JSON.parse(JSON.stringify(responseTemplate));
-    newResponse['OAI-PMH'].push({request: [{_attr: verb}, parseFullUrl(url, protocol, host)]});
+    newResponse['OAI-PMH'].push({request: [{_attr: verb}, url]});
     newResponse['OAI-PMH'].push(responseContent);
     return xml(newResponse, {declaration: true});
 }
@@ -78,20 +59,60 @@ function generateResponse(verb: string, url: string, protocol: string, host: str
  * @param {string} code - The OAI-PMH error code
  * @return {string} - Parsed XML exception
  */
-const generateException = (url: string, code: string) => {
+const generateException = (exception: ExceptionParams, code: string) => {
     /**
      * Validate the argument types.
      */
-    if ( code === undefined) {
+    if (code === undefined) {
         throw new Error(`Function arguments are missing:  code: ${code}`);
     }
-    if ( exceptions.Exceptions.getException(code) === exceptions.Exceptions.UNKNOWN_CODE) {
+    if (Exceptions.getException(code) === Exceptions.UNKNOWN_CODE) {
         throw new Error(`Unknown exception type: ${code}`);
     }
-
     const newException = JSON.parse(JSON.stringify(responseTemplate));
-    newException['OAI-PMH'].push({request: url});
-    newException['OAI-PMH'].push({error: [{_attr: {code}}, exceptions.Exceptions.getException(code)]});
+
+    if (exception.verb && exception.identifier && exception.metadataPrefix) {
+        newException['OAI-PMH'].push({
+            request: [
+                {
+                    _attr:
+                        {
+                            verb: exception.verb,
+                            identifier: exception.identifier,
+                            metadataPrefix: exception.metadataPrefix
+                        }
+                },
+                exception.baseUrl
+            ]
+        });
+    }
+    else if (exception.verb && exception.identifier) {
+        newException['OAI-PMH'].push({
+            request: [
+                {
+                    _attr: {
+                        verb: exception.verb,
+                        identifier: exception.identifier
+                    }
+                },
+                exception.baseUrl]
+        });
+    } else if (exception.verb) {
+        newException['OAI-PMH'].push(
+            {
+                request: [
+                    {
+                        _attr:
+                            {verb: exception.verb}
+                    },
+                    exception.baseUrl
+                ]
+            });
+    } else {
+        newException['OAI-PMH'].push({request: exception.baseUrl});
+    }
+
+    newException['OAI-PMH'].push({error: [{_attr: {code}}, Exceptions.getException(code)]});
 
     return xml(newException, {declaration: true});
 };

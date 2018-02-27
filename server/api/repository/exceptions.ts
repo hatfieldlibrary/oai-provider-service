@@ -1,44 +1,57 @@
+/*
+ * Copyright 2018 Willamette University
+ *
+ * This file is part of commons-oai-provider.
+ *
+ * commons-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki, The National Library of Finland.
+ *
+ *     commons-oai-provider is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Foobar is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with commons-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import {ExceptionMessages} from "./exception-messages";
+import {ExceptionCodes} from "./core-oai-provider";
 
 
 export class Exceptions  {
 
-    static badArgument: string = 'Illegal recordsQuery parameter';
-    static badResumptionToken: string = 'The resumption token is invalid';
-    static badVerb = 'Illegal OAI verb';
-    static cannotDisseminateFormat = 'The metadata format identified by the value given for the metadataPrefix ' +
-        'argument is not supported by the item or by the repository.';
-    static idDoesNotExist = 'The value of the identifier argument is unknown or illegal in this repository.';
-    static noRecordsMatch = 'The combination of the values of the from, until, set and metadataPrefix arguments ' +
-        'results in an empty list.';
-    static noMetadataFormats = 'There are no metadata formats available for the specified item.';
-    static noSetHierarchy = 'The repository does not support sets.';
-    public static UNKNOWN_CODE: string = 'unknown';
+    static UNKNOWN_CODE = "unknown code";
 
     public static getException(code: string) : string {
         switch(code) {
-            case 'badArgument': {
-               return this.badArgument;
+            case ExceptionCodes.BAD_ARGUMENT: {
+               return ExceptionMessages.BAD_ARGUMENT;
             }
-            case 'badResumptionToken': {
-                return this.badResumptionToken;
+            case ExceptionCodes.BAD_RESUMPTION_TOKEN: {
+                return ExceptionMessages.BAD_RESUMPTION_TOKEN;
             }
-            case 'badVerb': {
-                return this.badVerb;
+            case ExceptionCodes.BAD_VERB: {
+                return ExceptionMessages.BAD_VERB;
             }
-            case 'cannotDisseminateFormat': {
-                return this.cannotDisseminateFormat;
+            case ExceptionCodes.CANNOT_DISSEMINATE_FORMAT: {
+                return ExceptionMessages.CANNOT_DISSEMINATE_FORMAT;
             }
-            case 'idDoesNotExist': {
-                return this.idDoesNotExist;
+            case ExceptionCodes.ID_DOES_NOT_EXIST: {
+                return ExceptionMessages.ID_DOES_NOT_EXIST;
             }
-            case 'noRecordsMatch': {
-                return this.noRecordsMatch
+            case ExceptionCodes.NO_RECORDS_MATCH: {
+                return ExceptionMessages.NO_RECORDS_MATCH;
             }
-            case 'noMetadataFormats': {
-                return this.noMetadataFormats;
+            case ExceptionCodes.NO_METADATA_FORMATS: {
+                return ExceptionMessages.NO_METADATA_FORMATS;
             }
-            case 'noSetHierarchy': {
-                return this.noSetHierarchy;
+            case ExceptionCodes.NO_SET_HIERARCHY: {
+                return ExceptionMessages.NO_SET_HEIRARCHY;
             }
             default: {
                 return this.UNKNOWN_CODE;
@@ -46,4 +59,4 @@ export class Exceptions  {
 
         }
     }
-};
+}

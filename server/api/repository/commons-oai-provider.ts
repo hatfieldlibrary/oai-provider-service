@@ -1,29 +1,22 @@
-/**
+/*
+ * Copyright 2018 Willamette University
  *
- * @licstart  The following is the entire license notice for the JavaScript code in this file.
+ * This file is part of commons-oai-provider.
  *
- * Backend module prototype for oai-pmh-server
+ * commons-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki, The National Library of Finland.
  *
- * Copyright (c) 2017 University Of Helsinki (The National Library Of Finland)
+ *     commons-oai-provider is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
  *
- * This file is part of oai-pmh-server-backend-module-prototype
+ *     Foobar is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
  *
- * oai-pmh-server-backend-module-prototype is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * oai-pmh-server-backend-module-prototype is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @licend  The above is the entire license notice
- * for the JavaScript code in this file.
- *
+ *     You should have received a copy of the GNU General Public License
+ *     along with commons-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* eslint-disable no-unused-vars */
@@ -69,14 +62,14 @@
 import {MysqlConnector} from "../dao/mysql";
 
 /**
- * @typedef {Object} backendModule
+ * @typedef {Object} oaiService
  * @property {getCapabilities} getCapabilities - Get capabilities of the backend module
  * @property {getSets} getSets - Get the sets the backend supports
  * @property {getRecords} getRecords - xxx
  * @property {getIdentifiers} getIdentifiers - xxx
  * @property {getRecord} getRecord - xxx
  */
-export interface BackendProvider {
+export interface OaiProvider {
     getCapabilities: any;
     getSets: any;
     getRecords: any;
@@ -136,9 +129,9 @@ export const METADATA_FORMAT_DC = {
 /**
  * Factory function to create a backend module
  * @param {Object} [options={}] - Implementation-specific options
- * @returns {backendModule} Backend module
+ * @returns {oaiService} Backend module
  */
-export function factory(options = {}): BackendProvider {
+export function factory(options = {}): OaiProvider {
 
     const mysql: MysqlConnector = MysqlConnector.getInstance();
 
@@ -177,6 +170,7 @@ export function factory(options = {}): BackendProvider {
          * @returns {Promise<{prefix: string; schema: string; namespace: string}[]>}
          */
         getMetadataFormats: (identifier: string = undefined) => {
+            // Since only DC is supported, safe to ignore the identifier param.
             return Promise.resolve([METADATA_FORMAT_DC]);
         },
         /**

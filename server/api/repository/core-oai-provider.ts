@@ -1,12 +1,31 @@
-import {Request, Response} from "express";
+
+/*
+ * Copyright 2018 Willamette University
+ *
+ * This file is part of commons-oai-provider.
+ *
+ * commons-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki, The National Library of Finland.
+ *
+ *     commons-oai-provider is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Foobar is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with commons-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import {generateException, generateResponse} from "./oai-response";
-import {BackendModule} from '../../common/backend-module-singleton';
+import {OaiService} from './oai-service';
 import {Configuration} from "../../config/configuration";
-import {findKey} from 'lodash';
-import {ERRORS, Record} from "./commons-oai-provider";
 import logger from "../../common/logger";
 import {OaiDcMapper} from "./oai-dc-mapper";
-import * as url from "url";
+import {METADATA_FORMAT_DC} from "./commons-oai-provider";
 
 interface Formats {
     prefix: string;
@@ -14,21 +33,47 @@ interface Formats {
     namespace: string;
 }
 
-export class OaiProviderRepository {
+export interface ExceptionParams {
+    baseUrl: string;
+    verb?: Verbs;
+    identifier?: string;
+    metadataPrefix?: string
+}
 
-    // Singleton of the core oai module. This module validates
-    // the Configuration and instantiates the oai provider.
-    backendModule: BackendModule;
-    // The core oai module validates oai configuration
-    // for this server.
+export enum Verbs {
+    IDENTIFY = 'Identify',
+    LIST_METADATA_FORMATS = 'ListMetadataFormats',
+    LIST_SETS = 'ListSets',
+    GET_RECORD = 'GetRecord',
+    LIST_IDENTIFIERS = 'ListIdentifiers',
+    LIST_RECORDS = 'ListRecords'
+}
+
+export enum ExceptionCodes {
+    BAD_ARGUMENT = "badArgument",
+    BAD_RESUMPTION_TOKEN = "badResumptionToken",
+    BAD_VERB = "badVerb",
+    CANNOT_DISSEMINATE_FORMAT = "cannotDisseminateFormat",
+    ID_DOES_NOT_EXIST = "idDoesNotExist",
+    NO_RECORDS_MATCH = "noRecordsMatch",
+    NO_METADATA_FORMATS = "noMetadataFormats",
+    NO_SET_HIERARCHY = "noSetHierarchy"
+}
+
+
+
+export class CoreOaiProvider {
+
+    oaiService: OaiService;
     parameters: Configuration;
 
-    const
     possibleParams = ['verb', 'from', 'until', 'metadataPrefix', 'set', 'resumptionToken'];
 
     constructor() {
-        this.backendModule = BackendModule.getInstance();
-        this.parameters = this.backendModule.getParameters();
+        // Singleton of the core oai service. This module validates
+        // the Configuration and instantiates the oai provider.
+        this.oaiService = OaiService.getInstance();
+        this.parameters = this.oaiService.getParameters();
     }
 
     private hasKey(object: object, key: string): boolean {
@@ -39,61 +84,55 @@ export class OaiProviderRepository {
         return Object.keys(query).map(key => query[key]);
     }
 
-    public oai(query: any): Promise<any> {
+    private validateSelectiveParams(parameters: any): boolean {
+        if (parameters.until) {
+            if (!parameters.from) {
+                return false;
+            }
+            return parseInt(parameters.from) <= parseInt(parameters.until);
+        }
+        return true;
+    }
 
-        res.set('Content-Type', 'text/xml');
+    listSets(query: any): Promise<any> {
         /**
-         * All provided recordsQuery parameters are collected into the 'queryParameters' array.
+         * Parameters: resumptionToken (exclusive)
+         * exceptions: badArgument, badResumptionToken, noSetHierarchy
          */
-        //const queryParameters = Object.keys(req.query).map(key => req.query[key]);
+        return new Promise((resolve: any, reject: any) => {
+            const queryParameters = this.getQueryParameters(query);
+            const exception: ExceptionParams = {
+                baseUrl:  this.parameters.baseURL,
+                verb: Verbs.LIST_SETS
+            };
+            if (queryParameters.length > 2 || (queryParameters.length === 2 &&
+                    !this.hasKey(query, 'resumptionToken'))) {
+                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+            } else {
+                resolve(generateException(exception, ExceptionCodes.NO_SET_HIERARCHY));
+            }
+        });
+    }
 
-        logger.debug("Query Parameters: " + queryParameters);
-        logger.debug("req.query.verb: " + req.query.verb);
-        logger.debug("Server parameters: " + this.parameters);
-
+    listMetadataFormats(query: any): Promise<any> {
         /**
-         * A list of possible parameters that ListIdentifiers or ListRecords can take.
+         * Parameters: identifier (optional)
+         * exceptions: badArgument, idDoesNotExist, noMetadataFormats
          */
-
-        switch (req.query.verb) {
-            case 'Identify':
-
-
-                /**
-                 * Parameters: none
-                 * exceptions: badArgument
-                 */
-                if (queryParameters.length > 1) {
-                    res.send(generateException(req, 'badArgument'));
-                } else {
-                    this.backendModule.getProvider().getCapabilities().then((capabilities: any) => {
-                        const responseContent = {
-                            Identify: [
-                                {repositoryName: this.parameters.repositoryName},
-                                {baseURL: this.parameters.baseURL},
-                                {protocolVersion: this.parameters.protocolVersion},
-                                {adminEmail: this.parameters.adminEmail},
-                                {earliestDatestamp: capabilities.earliestDatestamp},
-                                {deletedRecord: capabilities.deletedRecordsSupport},
-                                {granularity: capabilities.harvestingGranularity}
-                            ]
-                        };
-
-                        res.send(generateResponse(req, responseContent));
-                    });
-                }
-                break;
-            case 'ListMetadataFormats':
-                /**
-                 * Parameters: identifier (optional)
-                 * exceptions: badArgument, idDoesNotExist, noMetadataFormats
-                 */
-                if (queryParameters.length > 2 || (queryParameters.length === 2 &&
-                        !this.hasKey(req.query, 'identifier'))) {
-                    res.send(generateException(req, 'badArgument'));
-                } else {
-                    const args = this.hasKey(req.query, 'identifier') ? req.query.identifier : undefined;
-                    this.backendModule.getProvider().getMetadataFormats(args).then((formats: any[]) => {
+        return new Promise((resolve: any, reject: any) => {
+            const queryParameters = this.getQueryParameters(query);
+            const exception: ExceptionParams = {
+                baseUrl:  this.parameters.baseURL,
+                verb: Verbs.LIST_METADATA_FORMATS,
+                metadataPrefix: METADATA_FORMAT_DC.prefix
+            };
+            if (queryParameters.length > 2 || (queryParameters.length === 2 &&
+                    !this.hasKey(query, 'identifier'))) {
+                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+            } else {
+                const args = this.hasKey(query, 'identifier') ? query.identifier : undefined;
+                this.oaiService.getProvider().getMetadataFormats(args).then((formats: any[]) => {
+                    try {
                         const responseContent = {
                             ListMetadataFormats: formats.map((format: Formats) => {
                                 return {
@@ -105,141 +144,120 @@ export class OaiProviderRepository {
                                 };
                             })
                         };
-                        res.send(generateResponse(req, responseContent));
-                    });
-                }
-                break;
-            case 'ListSets':
-                /**
-                 * Parameters: resumptionToken (exclusive)
-                 * exceptions: badArgument, badResumptionToken, noSetHierarchy
-                 */
-                if (queryParameters.length > 2 || (queryParameters.length === 2 &&
-                        !this.hasKey(req.query, 'resumptionToken'))) {
-                    res.send(generateException(req, 'badArgument'));
-                } else {
-                    /**
-                     * @todo: Implement set functionality. Currently not supported by
-                     * the backend.
-                     */
-                    const args = this.hasKey(req.query, 'resumptionToken') ? req.query.resumptionToken : undefined;
-                    res.send(generateException(req, 'noSetHierarchy'));
-                }
-                break;
-            case 'ListIdentifiers':
-                /**
-                 * Parameters: from (optional),
-                 * until (optional),
-                 * metadataPrefix (required),
-                 * set (optional),
-                 * resumptionToken (exclusive)
-                 *
-                 * exceptions: badArgument,
-                 * badResumptionToken,
-                 * cannotDisseminateFormat,
-                 * noRecordsMatch,
-                 * noSetHierarchy
-                 */
-                if (
-                    (queryParameters.length > 6 || queryParameters.length < 2) ||
-                    (queryParameters.length === 2 && (!this.hasKey(req.query, 'metadataPrefix') &&
-                        !this.hasKey(req.query, 'resumptionToken'))) ||
-                    (!Object.keys(req.query).every(key => possibleParams.indexOf(key) >= 0))) {
-                    res.send(generateException(req, 'badArgument'));
-                } else {
-                    try {
-                        this.backendModule.getProvider().getIdentifiers(req.query)
-                            .then((result: any) => {
-                                try {
-                                    const mapped = OaiDcMapper.mapOaiDcListIdentifiers(result);
-                                    res.send(generateResponse(req, mapped));
-                                } catch (err) {
-                                    logger.error(err);
-                                    res.send(generateException(req, 'noRecordsMatch'));
-                                }
-
-                            })
-                            .catch((err: Error) =>
-                                logger.error(err))
-
+                        resolve(generateResponse(query.verb, this.parameters.baseURL, responseContent));
                     } catch (err) {
-                        throw new Error(err);
+                        logger.error(err);
+                        reject(generateException(exception, ExceptionCodes.NO_METADATA_FORMATS));
                     }
-
-                }
-                break;
-            case 'ListRecords':
-                /**
-                 * Parameters: from (optional),
-                 * until (optional),
-                 * metadataPrefix (required),
-                 * set (optional),
-                 * resumptionToken (exclusive)
-                 *
-                 * exceptions: badArgument,
-                 * badResumptionToken,
-                 * cannotDisseminateFormat,
-                 * noRecordsMatch,
-                 * noSetHierarchy
-                 */
-                if ((queryParameters.length > 6 || queryParameters.length < 2) ||
-                    (queryParameters.length === 2 && (!this.hasKey(req.query, 'metadataPrefix') &&
-                        !this.hasKey(req.query, 'resumptionToken'))) ||
-                    (!Object.keys(req.query).every(key => possibleParams.indexOf(key) >= 0))) {
-                    res.send(generateException(req, 'badArgument'));
-                } else {
-                    try {
-                        this.backendModule.getProvider().getRecords(req.query)
-                            .then((result: any) => {
-                                try {
-                                    const mapped = OaiDcMapper.mapOaiDcListRecords(result);
-                                    res.send(generateResponse(req, mapped))
-                                } catch (err) {
-                                    logger.error(err);
-                                    res.send(generateException(req, 'noRecordsMatch'));
-                                }
-
-                            })
-                            .catch((err: Error) =>
-                                logger.error(err))
-
-                    } catch (err) {
-                        throw new Error(err);
-                    }
-
-                }
-                break;
-            case 'GetRecord':
-                /**
-                 * Parameters: identifier (required),
-                 * metadataPrefix (required)
-                 *
-                 * exceptions: badArgument,
-                 * cannotDisseminateFormat,
-                 * idDoesNotExist
-                 */
-                if (queryParameters.length !== 3 || !this.hasKey(req.query, 'identifier') ||
-                    !this.hasKey(req.query, 'metadataPrefix')) {
-                    res.send(generateException(req, 'badArgument'));
-                } else {
-                    this.backendModule.getProvider().getRecord(req.query.identifier, req.query.metadataPrefix)
-                        .then((record: any) => {
-                            const mapped = OaiDcMapper.mapOaiDcGetRecord(record);
-                            res.send(generateResponse(req, mapped));
-
-                        })
-                        .catch((err: Error) => {
-                            res.send(generateException(req, 'noRecordsMatch'));
-                            logger.error(err)
-                        });
-                }
-                break;
-            default:
-                res.send(generateException(req, 'badVerb'));
-        }
+                });
+            }
+        });
     }
 
-    listRecords(query: any, url: string, protocol: any, host: string): Promise<any> {
+    getRecord(query: any): Promise<any> {
+        /**
+         * Parameters: identifier (required),
+         * metadataPrefix (required)
+         *
+         * exceptions: badArgument,
+         * cannotDisseminateFormat,
+         * idDoesNotExist
+         */
+        return new Promise((resolve: any, reject: any) => {
+            const queryParameters = this.getQueryParameters(query);
+            const exception: ExceptionParams = {
+                baseUrl:  this.parameters.baseURL,
+                verb: Verbs.GET_RECORD,
+                identifier: query.identifier,
+                metadataPrefix: METADATA_FORMAT_DC.prefix
+            };
+            if (queryParameters.length !== 3 || !this.hasKey(query, 'identifier') ||
+                !this.hasKey(query, 'metadataPrefix')) {
+                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+            } else {
+                this.oaiService.getProvider().getRecord(query.identifier, query.metadataPrefix)
+                    .then((record: any) => {
+                        try {
+                            if (record.length === 1) {
+                                const mapped = OaiDcMapper.mapOaiDcGetRecord(record);
+                                resolve(generateResponse(query, this.parameters.baseURL, mapped))
+                            } else {
+                                // There should be one matching record.
+                                resolve(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
+                            }
+                        } catch (err) {
+                            logger.error(err);
+                            // If response parsing fails, return OAI error.
+                            reject(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
+                        }
+                    })
+                    .catch((err: Error) => {
+                        logger.error(err);
+                        // If dao query fails, return OAI error.
+                        reject(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
+                    });
+            }
+        });
+    }
+
+    listIdentifiers(query: any): Promise<any> {
+        /**
+         * Parameters: from (optional),
+         * until (optional),
+         * metadataPrefix (required),
+         * set (optional),
+         * resumptionToken (exclusive)
+         *
+         * exceptions: badArgument,
+         * badResumptionToken,
+         * cannotDisseminateFormat,
+         * noRecordsMatch,
+         * noSetHierarchy
+         */
+        return new Promise((resolve: any, reject: any) => {
+
+            const queryParameters = this.getQueryParameters(query);
+
+            const exception: ExceptionParams = {
+                baseUrl:  this.parameters.baseURL,
+                verb: Verbs.LIST_IDENTIFIERS,
+                metadataPrefix: METADATA_FORMAT_DC.prefix
+            };
+
+            if ((queryParameters.length > 6 || queryParameters.length < 2) ||
+                (queryParameters.length === 2 && (!this.hasKey(query, 'metadataPrefix') &&
+                    !this.hasKey(query, 'resumptionToken'))) ||
+                !this.validateSelectiveParams(query) ||
+                (!Object.keys(query).every(key => this.possibleParams.indexOf(key) >= 0))) {
+                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+            } else {
+                this.oaiService.getProvider().getIdentifiers(query)
+                    .then((result: any) => {
+                        if (result.length === 0) {
+                            resolve(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                        }
+                        try {
+                            const mapped = OaiDcMapper.mapOaiDcListIdentifiers(result);
+                            resolve(generateResponse(query, this.parameters.baseURL, mapped))
+                        } catch (err) {
+                            // Log the error and return OAI error message.
+                            logger.error(err);
+                            reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                        }
+
+                    })
+                    .catch((err: Error) => {
+                        logger.error(err);
+                        // If dao query fails, return OAI error.
+                        reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                    });
+
+            }
+        });
+    }
+
+
+    listRecords(query: any): Promise<any> {
         /**
          * Parameters: from (optional),
          * until (optional),
@@ -255,53 +273,63 @@ export class OaiProviderRepository {
          */
         return new Promise((resolve: any, reject: any) => {
             const queryParameters = this.getQueryParameters(query);
+            logger.debug(queryParameters)
+            const exception: ExceptionParams = {
+                baseUrl:  this.parameters.baseURL,
+                verb: Verbs.LIST_RECORDS,
+                metadataPrefix: METADATA_FORMAT_DC.prefix
+            };
+
             if ((queryParameters.length > 6 || queryParameters.length < 2) ||
                 (queryParameters.length === 2 && (!this.hasKey(query, 'metadataPrefix') &&
                     !this.hasKey(query, 'resumptionToken'))) ||
+                !this.validateSelectiveParams(query) ||
                 (!Object.keys(query).every(key => this.possibleParams.indexOf(key) >= 0))) {
-                resolve(generateException(url, 'badArgument'));
+                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
             } else {
-                try {
-                    if (queryParameters.length > 1) {
-                        resolve(generateException(url, 'badArgument'));
-                    }
-                    else {
-                        try {
-                            this.backendModule.getProvider().getRecords(query)
-                                .then((result: any) => {
-                                    try {
-                                        const mapped = OaiDcMapper.mapOaiDcListRecords(result);
-                                        resolve(generateResponse(query, url, protocol, host, mapped))
-                                    } catch (err) {
-                                        logger.error(err);
-                                        resolve(generateException(url, 'noRecordsMatch'));
-                                    }
-
-                                })
-                                .catch((err: Error) => {
-                                    logger.error(err);
-                                    reject(err)
-                                });
-
-                        } catch (err) {
-                            reject(err);
+                this.oaiService.getProvider().getRecords(query)
+                    .then((result: any) => {
+                        if (result.length === 0) {
+                            resolve(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
                         }
-                    }
-                } catch (err) {
-                    reject(err)
-                }
+                        try {
+                            const mapped = OaiDcMapper.mapOaiDcListRecords(result);
+                            resolve(generateResponse(query, this.parameters.baseURL, mapped))
+                        } catch (err) {
+                            // Log the error and return OAI error message.
+                            logger.error(err);
+                            reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                        }
+
+                    })
+                    .catch((err: Error) => {
+                        logger.error(err);
+                        // If dao query fails, return OAI error.
+                        reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                    });
+
             }
         });
     }
 
-    identify(query: any, url: string, protocol: any, host: string): Promise<any> {
+    identify(query: any): Promise<any> {
+        /**
+         * Parameters: none
+         * exceptions: badArgument
+         */
         return new Promise((resolve: any, reject: any) => {
             const queryParameters = this.getQueryParameters(query);
+
+            const exception: ExceptionParams = {
+                baseUrl:  this.parameters.baseURL,
+                verb: Verbs.IDENTIFY
+            };
+
             try {
                 if (queryParameters.length > 1) {
-                    resolve(generateException(url, 'badArgument'));
+                    resolve(generateException(exception, 'badArgument'));
                 } else {
-                    this.backendModule.getProvider().getCapabilities().then((capabilities: any) => {
+                    this.oaiService.getProvider().getCapabilities().then((capabilities: any) => {
                         const responseContent = {
                             Identify: [
                                 {repositoryName: this.parameters.repositoryName},
@@ -313,12 +341,12 @@ export class OaiProviderRepository {
                                 {granularity: capabilities.harvestingGranularity}
                             ]
                         };
-
-                        resolve(generateResponse(query, url, protocol, host, responseContent));
+                        resolve(generateResponse(query, this.parameters.baseURL, responseContent));
                     });
                 }
             } catch (err) {
-                reject(err);
+                logger.log(err);
+                reject(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
             }
         });
     }
