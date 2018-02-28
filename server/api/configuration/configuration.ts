@@ -22,7 +22,7 @@
  *  along with tagger-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {OaiService} from "../api/repository/oai-service";
+import {OaiService} from "../repository/oai-service";
 
 export class Configuration {
 

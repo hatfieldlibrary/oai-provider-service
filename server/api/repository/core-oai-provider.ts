@@ -25,7 +25,7 @@
 
 import {generateException, generateResponse} from "./oai-response";
 import {OaiService} from './oai-service';
-import {Configuration} from "../../provider-configuration/configuration";
+import {Configuration} from "../configuration/configuration";
 import logger from "../../common/logger";
 import {OaiDcMapper} from "./tagger-dc-mapper";
 import {METADATA_FORMAT_DC} from "./tagger-data-repository";

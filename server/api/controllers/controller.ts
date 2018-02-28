@@ -23,9 +23,9 @@
  */
 
 import {Request, Response} from "express";
-import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../../repository/core-oai-provider";
-import {generateException} from "../../repository/oai-response";
-import logger from "../../../common/logger";
+import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../repository/core-oai-provider";
+import {generateException} from "../repository/oai-response";
+import logger from "../../common/logger";
 
 const provider = new CoreOaiProvider();
 

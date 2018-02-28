@@ -23,7 +23,7 @@
  */
 
 import {factory} from "./tagger-data-repository";
-import {Configuration} from "../../provider-configuration/configuration";
+import {Configuration} from "../configuration/configuration";
 import logger from '../../common/logger';
 import {DataRepository} from "./core-oai-provider";
 
