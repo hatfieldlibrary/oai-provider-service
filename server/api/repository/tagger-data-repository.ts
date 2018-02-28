@@ -32,6 +32,12 @@
  */
 
 /**
+ * @typedef {Object} getSetsResponse
+ * @property {set[]} sets
+ * @property {flowControl} [flowControl]
+ */
+
+/**
  * @typedef {Object} set
  * @property {string} spec
  * @property {string} name
@@ -46,99 +52,89 @@
  * @property {number} [cursor]
  */
 
+/**
+ * @typedef {Object} record
+ * @property {string} resumptionToken
+ * @property {number}id
+ * @property {string} title
+ * @property {string} image
+ * @property {string} url
+ * @property {string} browseType
+ * @property {string} description
+ * @property {string} dates
+ * @property {string} items
+ * @property {string} ctype
+ * @property {string} repoType
+ * @property {string} restricted
+ * @property {boolean} published
+ * @property {string} createdAt
+ * @property {string} updatedAt
+ * @property {string} searchUrl
+ */
+
 
 import {MysqlConnector} from "../dao/mysql";
+import {DataRepository} from "./core-oai-provider";
+import logger from "../../common/logger";
 
-export interface OaiProvider {
-    getCapabilities: any;
-    getSets: any;
-    getRecords: any;
-    getMetadataFormats: any;
-    getIdentifiers: any;
-    getRecord: any;
-    closeConnection: any;
+export enum HARVESTING_GRANULARITY {
+    DATE = 'YYYY-MM-DD',
+    DATETIME = 'YYYY-MM-DDThh:mm:ssZ'
 }
 
-export const HARVESTING_GRANULARITY = {
-    DATE: 'YYYY-MM-DD',
-    DATETIME: 'YYYY-MM-DDThh:mm:ssZ'
-};
-export const DELETED_RECORDS_SUPPORT = {
-    NO: 'no',
-    TRANSIENT: 'transient',
-    PERSISTENT: 'persistent'
-};
-export const ERRORS = {
-    badArgument: 0,
-    badResumptionToken: 1,
-    badVerb: 2,
-    cannotDisseminateFormat: 4,
-    idDoesNotExist: 8,
-    noRecordsMatch: 16,
-    noMetadataFormats: 32,
-    noSetHierarchy: 64
-};
-
-export interface Record {
-    id: number;
-    title: string;
-    image: string;
-    url: string;
-    browseType: string;
-    description: string;
-    dates: string;
-    items: string;
-    ctype: string;
-    repoType: string;
-    restricted: string;
-    published: boolean;
-    createdAt: string;
-    updatedAt: string;
-    searchUrl: string;
-
+export enum DELETED_RECORDS_SUPPORT  {
+    NO = 'no',
+    TRANSIENT = 'transient',
+    PERSISTENT = 'persistent'
 }
-/**
- * @type {metadataFormat}
- */
-export const METADATA_FORMAT_DC = {
-    prefix: 'oai_dc',
-    schema: 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-    namespace: 'http://www.openarchives.org/OAI/2.0/oai_dc/'
-};
+
+// Not actually using these error defs in our responses.
+export enum ERRORS  {
+    badArgument = 0,
+    badResumptionToken = 1,
+    badVerb = 2,
+    cannotDisseminateFormat = 4,
+    idDoesNotExist = 8,
+    noRecordsMatch = 16,
+    noMetadataFormats = 32,
+    noSetHierarchy = 64
+}
+
+export enum METADATA_FORMAT_DC  {
+    prefix = 'oai_dc',
+    schema = 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+    namespace = 'http://www.openarchives.org/OAI/2.0/oai_dc/'
+}
+
+const EARLIEST_DATE = '2017-01-00T03:24:00';
 
 /**
- * Factory function to create a backend module
+ * Factory function to create a oai service
  * @param {Object} [options={}] - Implementation-specific options
- * @returns {oaiService} Backend module
+ * @param {{}} options
+ * @returns {DataRepository}
  */
-export function factory(options = {}): OaiProvider {
+export function factory(options = {}): DataRepository {
 
     const mysql: MysqlConnector = MysqlConnector.getInstance();
 
     return Object.freeze({
         /**
-         * Backend module specific capabilities
-         * @typedef {Object} capabilities
-         * @property {DELETED_RECORDS_SUPPORT} deletedRecordsSupport
-         * @property {HARVESTING_GRANULARITY} harvestingGranularity
-         * @property {Date} earliestDatestamp - Earliest record modification time available
-         */
-        /**
          * @typedef {function} getCapabilities
-         * @returns {Promise<capabilities>} Backend's capabilities
+         * @returns {Promise<capabilities>} Provider's capabilities
          */
         getCapabilities: () => {
             return Promise.resolve({
                 deletedRecordsSupport: DELETED_RECORDS_SUPPORT.NO,
                 harvestingGranularity: HARVESTING_GRANULARITY.DATETIME,
-                earliestDatestamp: new Date()
+                earliestDatestamp: EARLIEST_DATE
             });
         },
         /**
          * @typedef {function} getRecord
          * @param {string} identifier - xxx
          * @param {string} metadataPrefix - xxx
-         * @returns {Promise<record, number>} Resolves with a {@link record}
+         * @returns {Promise<record>} Resolves with a {@link record}
          */
         getRecord: (identifier: string, metadataPrefix: string) => {
             return mysql.getRecord(identifier);
@@ -153,11 +149,7 @@ export function factory(options = {}): OaiProvider {
             // Since only DC is supported, safe to ignore the identifier param.
             return Promise.resolve([METADATA_FORMAT_DC]);
         },
-        /**
-         * @typedef {Object} getSetsResponse
-         * @property {set[]} sets
-         * @property {flowControl} [flowControl]
-         */
+
         /**
          * Used to retrieve the set structure of a repository. Not supported currently.
          * Returns response indicating that the Commons repository does not have a set hierarchy.
@@ -201,10 +193,7 @@ export function factory(options = {}): OaiProvider {
         getRecords: (parameters: any) => {
             return mysql.recordsQuery(parameters);
 
-        },
-
-        closeConnection: () => {
-            return mysql.close();
         }
+
     });
 }

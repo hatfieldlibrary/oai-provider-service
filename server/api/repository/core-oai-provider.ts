@@ -23,10 +23,10 @@
 
 import {generateException, generateResponse} from "./oai-response";
 import {OaiService} from './oai-service';
-import {Configuration} from "../../config/configuration";
+import {Configuration} from "../../provider-configuration/configuration";
 import logger from "../../common/logger";
-import {OaiDcMapper} from "./oai-dc-mapper";
-import {METADATA_FORMAT_DC} from "./commons-oai-provider";
+import {OaiDcMapper} from "./tagger-dc-mapper";
+import {METADATA_FORMAT_DC} from "./tagger-data-repository";
 
 interface Formats {
     prefix: string;
@@ -61,8 +61,20 @@ export enum ExceptionCodes {
     NO_SET_HIERARCHY = "noSetHierarchy"
 }
 
+export interface DataRepository {
+    getCapabilities: any;
+    getSets: any;
+    getRecords: any;
+    getMetadataFormats: any;
+    getIdentifiers: any;
+    getRecord: any;
+}
 
-
+/**
+ * The core OAI provider class requires an instance of the OAI
+ * service (oai-service) that is configured with a data repository
+ * (tagger-data-repository).
+ */
 export class CoreOaiProvider {
 
     oaiService: OaiService;
@@ -77,14 +89,30 @@ export class CoreOaiProvider {
         this.parameters = this.oaiService.getParameters();
     }
 
-    private hasKey(object: object, key: string): boolean {
-        return Object.prototype.hasOwnProperty.call(object, key);
+    /**
+     * Checks for key on the queryParameters object.
+     * @param {object}
+     * @param {string}
+     * @returns {boolean}
+     */
+    private hasKey(queryParameters: object, key: string): boolean {
+        return Object.prototype.hasOwnProperty.call(queryParameters, key);
     }
 
+    /**
+     * Gets the query parameters provided by the http Request.
+     * @param query
+     * @returns {any[]}
+     */
     private getQueryParameters(query: any) {
         return Object.keys(query).map(key => query[key]);
     }
 
+    /**
+     * Validates that we have valid from and until value.
+     * @param parameters
+     * @returns {boolean}
+     */
     private validateSelectiveParams(parameters: any): boolean {
         if (parameters.until) {
             if (!parameters.from) {
@@ -94,6 +122,13 @@ export class CoreOaiProvider {
         }
         return true;
     }
+
+    /**
+     * Handle OAI requests. The methods return configuration values or
+     * retrieve data from the repository provider (tagger-oai-provider).
+     * Data from the provider is mapped to json (tagger-dc-mapper) and
+     * returned as xml (oai-response).
+     */
 
     listSets(query: any): Promise<any> {
         /**
@@ -136,6 +171,7 @@ export class CoreOaiProvider {
                     try {
                         const responseContent = {
                             ListMetadataFormats: formats.map((format: Formats) => {
+                                logger.debug(format);
                                 return {
                                     metadataFormat: [
                                         {metadataPrefix: format.prefix},
@@ -145,7 +181,7 @@ export class CoreOaiProvider {
                                 };
                             })
                         };
-                        resolve(generateResponse(query.verb, this.parameters.baseURL, responseContent));
+                        resolve(generateResponse(query, this.parameters.baseURL, responseContent));
                     } catch (err) {
                         logger.error(err);
                         reject(generateException(exception, ExceptionCodes.NO_METADATA_FORMATS));
@@ -188,13 +224,12 @@ export class CoreOaiProvider {
                             }
                         } catch (err) {
                             logger.error(err);
-                            // If response parsing fails, return OAI error.
                             reject(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
                         }
                     })
                     .catch((err: Error) => {
                         logger.error(err);
-                        // If dao query fails, return OAI error.
+                        // If dao query errs, return OAI error.
                         reject(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
                     });
             }
@@ -319,18 +354,19 @@ export class CoreOaiProvider {
          * exceptions: badArgument
          */
         return new Promise((resolve: any, reject: any) => {
+            logger.debug("Identify");
             const queryParameters = this.getQueryParameters(query);
-
             const exception: ExceptionParams = {
                 baseUrl:  this.parameters.baseURL,
                 verb: Verbs.IDENTIFY
             };
-
             try {
                 if (queryParameters.length > 1) {
                     resolve(generateException(exception, 'badArgument'));
                 } else {
                     this.oaiService.getProvider().getCapabilities().then((capabilities: any) => {
+                        logger.debug(this.parameters);
+                        logger.debug(capabilities);
                         const responseContent = {
                             Identify: [
                                 {repositoryName: this.parameters.repositoryName},

@@ -23,7 +23,7 @@
 
 import * as xml from 'xml';
 import {ExceptionParams} from "./core-oai-provider";
-import {Exceptions} from "./exceptions";
+import {Exceptions} from "./exceptions/exceptions";
 
 const responseTemplate = {
     'OAI-PMH': [

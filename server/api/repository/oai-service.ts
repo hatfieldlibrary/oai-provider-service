@@ -20,9 +20,10 @@
  *  along with tagger-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {OaiProvider, factory} from "./commons-oai-provider";
-import {Configuration} from "../../config/configuration";
+import {factory} from "./tagger-data-repository";
+import {Configuration} from "../../provider-configuration/configuration";
 import logger from '../../common/logger';
+import {DataRepository} from "./core-oai-provider";
 
 export class OaiService {
 
@@ -30,7 +31,7 @@ export class OaiService {
 
     parameters: Configuration;
 
-    oaiProvider: OaiProvider;
+    oaiProvider: DataRepository;
 
     MANDATORY_PARAMETERS = ['repositoryName', 'baseURL', 'adminEmail'];
     DEFAULT_PARAMETERS = {
@@ -46,12 +47,14 @@ export class OaiService {
 
     private initParameters(parameters: Configuration): any {
 
+        logger.debug(parameters);
+
         const missingParameters: string[] = this.MANDATORY_PARAMETERS.filter(key => {
             return !Object.hasOwnProperty.call(parameters, key);
         });
 
         if (missingParameters.length > 0) {
-            throw new Error('Mandatory parameters missing: ' + missingParameters.join());
+            throw new Error('Mandatory parameters missing: ' + missingParameters.join(':'));
         } else {
             parameters = (<any>Object).assign(JSON.parse(JSON.stringify(this.DEFAULT_PARAMETERS)),
                 JSON.parse(JSON.stringify(parameters)));
@@ -84,7 +87,7 @@ export class OaiService {
             });
 
             if (invalidParameters.length > 0) {
-                throw new Error('Invalid parameters: ' + invalidParameters.join());
+                throw new Error('Invalid parameters: ' + invalidParameters.join(':'));
             } else {
                 return parameters;
             }
@@ -109,7 +112,7 @@ export class OaiService {
         return this.parameters;
     }
 
-    public getProvider(): OaiProvider {
+    public getProvider(): DataRepository {
         return this.oaiProvider;
     }
 }
