@@ -1,8 +1,12 @@
 {
-  "name": "oai-pmh-provider",
+  "name": "OAI-PMH Service",
   "version": "1.0.0",
-  "description": "An OAI-PMH provider.",
+  "description": "A standalone OAI-PMH provider for Nodejs that can support multiple data sources.",
   "main": "index.js",
+  "license": "GPL-3.0-or-later",
+  "engines" : {
+    "node" : ">=8.9.4"
+  },
   "scripts": {
     "start": "cd dist && node index",
     "compile": "gulp build && gulp copy",
