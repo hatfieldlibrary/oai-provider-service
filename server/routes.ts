@@ -23,7 +23,7 @@
  */
 
 import { Application } from 'express';
-import * as controller from "./api/controllers/controller";
+import * as tagger from "./api/controllers/tagger";
 export default function routes(app: Application): void {
-  app.get('/oai', controller.oai);
+  app.get('/oai', tagger.oai);
 };

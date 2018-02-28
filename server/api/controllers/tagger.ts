@@ -23,8 +23,8 @@
  */
 
 import {Request, Response} from "express";
-import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../repository/core-oai-provider";
-import {generateException} from "../repository/oai-response";
+import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../tagger-provider/repository/core-oai-provider";
+import {generateException} from "../tagger-provider/repository/oai-response";
 import logger from "../../common/logger";
 
 const provider = new CoreOaiProvider();
@@ -48,6 +48,7 @@ export let oai = (req: Request, res: Response) => {
     switch (req.query.verb) {
 
         case 'Identify':
+            logger.debug('Identify request.');
             provider.identify(req.query)
                 .then((response) => {
                     res.send(response);
@@ -60,6 +61,7 @@ export let oai = (req: Request, res: Response) => {
             break;
 
         case 'ListMetadataFormats':
+            logger.debug('ListMetadataFormats request.');
             provider.listMetadataFormats(req.query)
                 .then((response) => {
                     res.send(response);
@@ -72,6 +74,7 @@ export let oai = (req: Request, res: Response) => {
             break;
 
         case 'ListIdentifiers':
+            logger.debug('ListIdentifiers request.');
             provider.listIdentifiers(req.query)
                 .then((response) => {
                     res.send(response)
@@ -84,6 +87,7 @@ export let oai = (req: Request, res: Response) => {
             break;
 
         case 'ListRecords':
+            logger.debug('ListRecords request.');
             provider.listRecords(req.query)
                 .then((response) => {
                     res.send(response)
@@ -96,6 +100,7 @@ export let oai = (req: Request, res: Response) => {
             break;
 
         case 'ListSets':
+            logger.debug('ListSet request.');
             provider.listSets(req.query)
                 .then((response) => {
                     res.send(response)
@@ -107,6 +112,7 @@ export let oai = (req: Request, res: Response) => {
             break;
 
         case 'GetRecord':
+            logger.debug('GetRecord request.');
             provider.getRecord(req.query)
                 .then((response) => {
                     res.send(response)

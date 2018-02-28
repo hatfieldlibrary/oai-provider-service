@@ -24,7 +24,7 @@
 
 import * as mysql from 'mysql';
 import {Pool} from "mysql";
-import logger from '../../common/logger';
+import logger from '../../../common/logger';
 
 export class MysqlConnector {
 

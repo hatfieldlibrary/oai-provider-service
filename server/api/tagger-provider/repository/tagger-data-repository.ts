@@ -77,7 +77,7 @@
 
 import {MysqlConnector} from "../dao/mysql";
 import {DataRepository} from "./core-oai-provider";
-import logger from "../../common/logger";
+import logger from "../../../common/logger";
 
 export enum HARVESTING_GRANULARITY {
     DATE = 'YYYY-MM-DD',

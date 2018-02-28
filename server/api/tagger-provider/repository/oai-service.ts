@@ -24,7 +24,7 @@
 
 import {factory} from "./tagger-data-repository";
 import {Configuration} from "../configuration/configuration";
-import logger from '../../common/logger';
+import logger from '../../../common/logger';
 import {DataRepository} from "./core-oai-provider";
 
 export class OaiService {

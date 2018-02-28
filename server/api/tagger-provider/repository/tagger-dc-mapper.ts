@@ -22,7 +22,7 @@
  *  along with tagger-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import logger from "../../common/logger";
+import logger from "../../../common/logger";
 
 export class OaiDcMapper {
 
