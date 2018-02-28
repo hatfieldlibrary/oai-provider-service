@@ -23,8 +23,9 @@
  */
 
 import logger from "../../../common/logger";
+import {ProviderDCMapper} from "../../core/core-oai-provider";
 
-export class OaiDcMapper {
+export class TaggerDcMapper implements ProviderDCMapper {
 
     /**
      * The Universal Coordinated Time (UTC) date needs to be modifed
@@ -32,21 +33,21 @@ export class OaiDcMapper {
      * @param record the raw data returned by the mysql dao query
      * @returns {string}
      */
-    private static setTimeZoneOffset(record: any): string {
+    private setTimeZoneOffset(record: any): string {
         const date = new Date(record.updatedAt);
         const timeZoneCorrection = new Date(date.getTime() + date.getTimezoneOffset() * -60000);
         return timeZoneCorrection.toISOString().split('.')[0] + "Z";
 
     }
 
-    private static getRightsMessage(restricted: boolean): string {
+    private getRightsMessage(restricted: boolean): string {
         if (restricted) {
             return "Restricted to University users."
         }
         return "Available to the public."
     }
 
-    private static createItemRecord(record: any): any {
+    private createItemRecord(record: any): any {
 
         const updatedAt: string = this.setTimeZoneOffset(record);
         let item =
@@ -82,7 +83,7 @@ export class OaiDcMapper {
         return item;
     }
 
-    public static mapOaiDcListRecords(records: any[]): any {
+    public mapOaiDcListRecords(records: any[]): any {
 
         const list = [];
         const response = {
@@ -102,7 +103,7 @@ export class OaiDcMapper {
 
     }
 
-    public static mapOaiDcGetRecord(records: any): any {
+    public mapOaiDcGetRecord(records: any): any {
 
         const record = records.pop();
         if (!record) {
@@ -115,7 +116,7 @@ export class OaiDcMapper {
 
     }
 
-    public static mapOaiDcListIdentifiers(records: any[]): any {
+    public mapOaiDcListIdentifiers(records: any[]): any {
 
         const list = [];
         const response = {

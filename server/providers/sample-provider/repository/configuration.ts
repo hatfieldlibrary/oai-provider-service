@@ -22,12 +22,13 @@
  *  along with tagger-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {OaiService} from "../repository/oai-service";
+import {OaiService} from "../../core/oai-service";
+import {ProviderConfiguration} from "../../core/core-oai-provider";
 
-export class Configuration {
+export class Configuration implements ProviderConfiguration {
 
-    public repositoryName: string = "Academic Commons";
-    public baseURL: string =  "https://libmedia.willamette.edu/commons/oai";
+    public repositoryName: string = "Sample Provider";
+    public baseURL: string =  "http://localhost:3000/sample/oai";
     public protocolVersion: string = '2.0';
     public adminEmail: string = "mspalti@willamette.edu";
     public port: number = 0;

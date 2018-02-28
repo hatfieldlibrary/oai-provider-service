@@ -75,38 +75,13 @@
  */
 
 
-import {MysqlConnector} from "../dao/mysql";
-import {DataRepository} from "./core-oai-provider";
+import {MysqlConnector} from "../dao/mysql-dao";
+import {
+    DataRepository, DELETED_RECORDS_SUPPORT, ERRORS, HARVESTING_GRANULARITY,
+    METADATA_FORMAT_DC
+} from "../../core/core-oai-provider";
 import logger from "../../../common/logger";
 
-export enum HARVESTING_GRANULARITY {
-    DATE = 'YYYY-MM-DD',
-    DATETIME = 'YYYY-MM-DDThh:mm:ssZ'
-}
-
-export enum DELETED_RECORDS_SUPPORT  {
-    NO = 'no',
-    TRANSIENT = 'transient',
-    PERSISTENT = 'persistent'
-}
-
-// Not actually using these error defs in our responses.
-export enum ERRORS  {
-    badArgument = 0,
-    badResumptionToken = 1,
-    badVerb = 2,
-    cannotDisseminateFormat = 4,
-    idDoesNotExist = 8,
-    noRecordsMatch = 16,
-    noMetadataFormats = 32,
-    noSetHierarchy = 64
-}
-
-export enum METADATA_FORMAT_DC  {
-    prefix = 'oai_dc',
-    schema = 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-    namespace = 'http://www.openarchives.org/OAI/2.0/oai_dc/'
-}
 
 const EARLIEST_DATE = '2017-01-00T03:24:00';
 
@@ -138,8 +113,8 @@ export function factory(options = {}): DataRepository {
          * @param {string} metadataPrefix - xxx
          * @returns {Promise<record>} Resolves with a {@link record}
          */
-        getRecord: (identifier: string, metadataPrefix: string) => {
-            return mysql.getRecord(identifier);
+        getRecord: (parameters: any) => {
+            return mysql.getRecord(parameters);
         },
 
         /**
@@ -180,6 +155,7 @@ export function factory(options = {}): DataRepository {
          * @returns {Promise<getRecordsResponse, error>} Actual record metadata is not contained in the response
          */
         getIdentifiers: (parameters: any) => {
+            logger.debug("Tagger GetIdentifiers");
             return mysql.identifiersQuery(parameters);
         },
         /**

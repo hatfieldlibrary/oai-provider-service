@@ -23,7 +23,7 @@
  */
 
 import {ExceptionMessages} from "./exception-messages";
-import {ExceptionCodes} from "../core-oai-provider";
+import {ExceptionCodes} from "../../../core/core-oai-provider";
 
 
 export class Exceptions  {

@@ -22,18 +22,16 @@
  *  along with tagger-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {factory} from "./tagger-data-repository";
-import {Configuration} from "../configuration/configuration";
-import logger from '../../../common/logger';
-import {DataRepository} from "./core-oai-provider";
+import logger from '../../common/logger';
+import {DataRepository, ProviderConfiguration} from "./core-oai-provider";
 
 export class OaiService {
 
     public static instance: OaiService;
 
-    parameters: Configuration;
-
     oaiProvider: DataRepository;
+
+    parameters: ProviderConfiguration;
 
     MANDATORY_PARAMETERS = ['repositoryName', 'baseURL', 'adminEmail'];
     DEFAULT_PARAMETERS = {
@@ -42,12 +40,16 @@ export class OaiService {
         oaiService: {}
     };
 
-    private constructor() {
-        const configuration = new Configuration();
-        this.parameters = this.initParameters(configuration)
+    public constructor(factory: any, configuration: ProviderConfiguration) {
+
+        logger.debug(configuration);
+
+            this.parameters = this.initParameters(configuration);
+            this.oaiProvider = factory(this.parameters);
+
     }
 
-    private initParameters(parameters: Configuration): any {
+    private initParameters(parameters: ProviderConfiguration): any {
 
         logger.debug(parameters);
 
@@ -96,21 +98,7 @@ export class OaiService {
         }
     }
 
-    public static getInstance(): OaiService {
-        try {
-            if (this.instance) {
-                return this.instance;
-            }
-            this.instance = new OaiService();
-            this.instance.oaiProvider = factory(this.instance.parameters);
-            return this.instance;
-
-        } catch(err) {
-            throw new Error('Creating the backend module failed: ' + err.message);
-        }
-    }
-
-    public getParameters(): Configuration {
+    public getParameters(): ProviderConfiguration {
         return this.parameters;
     }
 

@@ -23,11 +23,20 @@
  */
 
 import {Request, Response} from "express";
-import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../tagger-provider/repository/core-oai-provider";
-import {generateException} from "../tagger-provider/repository/oai-response";
+import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../core/core-oai-provider";
+import {generateException} from "../core/oai-response";
 import logger from "../../common/logger";
+import {factory} from "../tagger-provider/repository/tagger-data-repository";
+import {Configuration} from "../tagger-provider/repository/configuration";
+import {TaggerDcMapper} from "../tagger-provider/repository/tagger-dc-mapper";
 
-const provider = new CoreOaiProvider();
+
+/**
+ * Set up the OAI provider to use the tagger repository implementation. Separate
+ * controllers can instantiate providers with different repositories.
+ * @type {CoreOaiProvider}
+ */
+const provider = new CoreOaiProvider(factory, new Configuration(), new TaggerDcMapper());
 
 /**
  * The OAI-PMH controller provides a single endpoint for OAI requests.

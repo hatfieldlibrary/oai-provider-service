@@ -61,6 +61,7 @@ export class MysqlConnector {
     }
 
     public recordsQuery(parameters: any): Promise<any> {
+
         let whereClause: string = "";
         if (parameters.from && parameters.until) {
             const until = this.pool.escape(parameters.until);
@@ -74,7 +75,9 @@ export class MysqlConnector {
         } else {
             whereClause = " c.published = true ";
         }
+
         logger.debug(whereClause);
+
         return new Promise((resolve: any, reject: any) => {
 
             this.pool.getConnection((err, connection) => {

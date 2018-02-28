@@ -25,15 +25,57 @@
 
 import {generateException, generateResponse} from "./oai-response";
 import {OaiService} from './oai-service';
-import {Configuration} from "../configuration/configuration";
-import logger from "../../../common/logger";
-import {OaiDcMapper} from "./tagger-dc-mapper";
-import {METADATA_FORMAT_DC} from "./tagger-data-repository";
+import logger from "../../common/logger";
 
 interface Formats {
     prefix: string;
     schema: string;
     namespace: string;
+}
+export enum HARVESTING_GRANULARITY {
+    DATE = 'YYYY-MM-DD',
+    DATETIME = 'YYYY-MM-DDThh:mm:ssZ'
+}
+
+export enum DELETED_RECORDS_SUPPORT  {
+    NO = 'no',
+    TRANSIENT = 'transient',
+    PERSISTENT = 'persistent'
+}
+
+// Not actually using these error defs in our responses.
+export enum ERRORS  {
+    badArgument = 0,
+    badResumptionToken = 1,
+    badVerb = 2,
+    cannotDisseminateFormat = 4,
+    idDoesNotExist = 8,
+    noRecordsMatch = 16,
+    noMetadataFormats = 32,
+    noSetHierarchy = 64
+}
+
+export enum METADATA_FORMAT_DC  {
+    prefix = 'oai_dc',
+    schema = 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+    namespace = 'http://www.openarchives.org/OAI/2.0/oai_dc/'
+}
+
+export interface ProviderConfiguration {
+    repositoryName: string;
+    baseURL: string;
+    protocolVersion: string;
+    adminEmail: string;
+    port: number;
+    description: string;
+    oaiService: OaiService;
+}
+
+export interface ProviderDCMapper {
+    mapOaiDcListRecords(records: any[]): any;
+    mapOaiDcGetRecord(records: any): any;
+    mapOaiDcListIdentifiers(records: any[]): any;
+
 }
 
 export interface ExceptionParams {
@@ -80,15 +122,19 @@ export interface DataRepository {
 export class CoreOaiProvider {
 
     oaiService: OaiService;
-    parameters: Configuration;
+    parameters: ProviderConfiguration;
+    mapper: ProviderDCMapper;
 
     possibleParams = ['verb', 'from', 'until', 'metadataPrefix', 'set', 'resumptionToken'];
 
-    constructor() {
+    constructor(factory: any,
+                configuration: ProviderConfiguration,
+                mapper: ProviderDCMapper) {
         // Singleton of the core oai service. This module validates
         // the Configuration and instantiates the oai provider.
-        this.oaiService = OaiService.getInstance();
+        this.oaiService = new OaiService(factory, configuration);
         this.parameters = this.oaiService.getParameters();
+        this.mapper = mapper;
     }
 
     /**
@@ -214,11 +260,11 @@ export class CoreOaiProvider {
                 !this.hasKey(query, 'metadataPrefix')) {
                 resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
             } else {
-                this.oaiService.getProvider().getRecord(query.identifier, query.metadataPrefix)
+                this.oaiService.getProvider().getRecord(query)
                     .then((record: any) => {
                         try {
                             if (record.length === 1) {
-                                const mapped = OaiDcMapper.mapOaiDcGetRecord(record);
+                                const mapped = this.mapper.mapOaiDcGetRecord(record);
                                 resolve(generateResponse(query, this.parameters.baseURL, mapped))
                             } else {
                                 // There should be one matching record.
@@ -268,6 +314,7 @@ export class CoreOaiProvider {
                 !this.validateSelectiveParams(query) ||
                 (!Object.keys(query).every(key => this.possibleParams.indexOf(key) >= 0))) {
                 resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+
             } else {
                 this.oaiService.getProvider().getIdentifiers(query)
                     .then((result: any) => {
@@ -275,7 +322,7 @@ export class CoreOaiProvider {
                             resolve(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
                         }
                         try {
-                            const mapped = OaiDcMapper.mapOaiDcListIdentifiers(result);
+                            const mapped = this.mapper.mapOaiDcListIdentifiers(result);
                             resolve(generateResponse(query, this.parameters.baseURL, mapped))
                         } catch (err) {
                             // Log the error and return OAI error message.
@@ -331,7 +378,7 @@ export class CoreOaiProvider {
                             resolve(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
                         }
                         try {
-                            const mapped = OaiDcMapper.mapOaiDcListRecords(result);
+                            const mapped = this.mapper.mapOaiDcListRecords(result);
                             resolve(generateResponse(query, this.parameters.baseURL, mapped))
                         } catch (err) {
                             // Log the error and return OAI error message.

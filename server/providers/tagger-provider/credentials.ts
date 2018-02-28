@@ -22,10 +22,21 @@
  *  along with tagger-oai-provider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Application } from 'express';
-import * as tagger from "./providers/controllers/tagger";
-import * as sample from "./providers/controllers/sample";
-export default function routes(app: Application): void {
-  app.get('/tagger/oai', tagger.oai);
-  app.get('/sample/oai', sample.oai);
-};
+/**
+ * Parses the JSON content of the tagger database
+ * configuration file and exports the Javascript object.
+ *
+ * The location of the configuration file is defined in
+ * .env
+ */
+import logger from "../../common/logger";
+import * as fs from 'fs';
+
+const credFile = process.env.TAGGER_CONFIGURATION;
+
+logger.debug(credFile);
+
+const credentials = JSON.parse(fs.readFileSync(credFile, 'utf8'));
+
+export default credentials;
+

@@ -25,7 +25,7 @@
 
 import * as xml from 'xml';
 import {ExceptionParams} from "./core-oai-provider";
-import {Exceptions} from "./exceptions/exceptions";
+import {Exceptions} from "../tagger-provider/repository/exceptions/exceptions";
 
 const responseTemplate = {
     'OAI-PMH': [
