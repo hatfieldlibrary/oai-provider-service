@@ -2,6 +2,8 @@
  *  Copyright 2018 Willamette University
  *
  *  This file is part of tagger-oai-provider.
+ *  
+ *  @author Michael Spalti
  *
  *  tagger-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki, 
  *  The National Library of Finland.

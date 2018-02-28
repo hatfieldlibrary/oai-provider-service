@@ -3,8 +3,10 @@
  *  Copyright 2018 Willamette University
  *
  *  This file is part of tagger-oai-provider.
+ *  
+ *  @author Michael Spalti
  *
- *  tagger-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki,
+ *  tagger-oai-provider is based on the Modular OAI-PMH Server, University of Helsinki, 
  *  The National Library of Finland.
  *
  *  tagger-oai-provider is free software: you can redistribute it and/or modify
@@ -13,7 +15,7 @@
  *  (at your option) any later version.
  *
  *  tagger-oai-provider is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of 
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
