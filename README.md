@@ -12,8 +12,8 @@ The `tagger-provider` uses a Domain Access Object (DAO) with mysql support for q
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  ListSets is not supported.  
 
 The `sample-provider` DAO returns dummy data. Repository modules use this data to provide the same OAI-PMH services as `tagger-provider`
-minus selective harvesting.  The main purpose of `sample-provider` is to verify that OAI-PMH Service is designed for multiple providers via different 
-Express routes.  It could also be used as the template for implementing a new provider service for real data.
+-- minus selective harvesting.  The main purpose of `sample-provider` is to verify that the OAI-PMH Service can serve multiple providers via different 
+Express routes.  It can also be used as the template for implementing a another, new OAI-PHM provider for real data.
 
 ## Install It
 ```
