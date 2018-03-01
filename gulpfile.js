@@ -40,4 +40,9 @@ gulp.task("copy", function() {
         .pipe(gulp.dest("dist"));
 });
 
+gulp.task("copy-libraries", function() {
+    return gulp.src("node_modules/**/*.js")
+        .pipe(gulp.dest("dist/node_modules"));
+});
+
 

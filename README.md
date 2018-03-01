@@ -36,10 +36,18 @@ npm run dev
 
 #### Run in *production* mode:
 
+At the simplest level:
 ```
 npm run compile
 npm start
 ```
+
+The gulp tasks compile Typescript and copy files to `dist`. 
+
+The project can be deployed to a production server and started with `node index` from within `dist`. Runtime configurations
+can be adjusted using `.env`. We typically run as daemon with `forever` or anther tool to assure the script runs continuously.  
+
+Will be adding a Dockerfile soon.
 
 
 
