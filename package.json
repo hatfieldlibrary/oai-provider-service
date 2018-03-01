@@ -24,7 +24,6 @@
     "lodash": "^4.17.5",
     "mysql": "^2.15.0",
     "pino": "^4.7.3",
-    "sequelize": "^4.33.4",
     "source-map-support": "^0.4.15",
     "xml": "^1.0.1",
     "xmldom": "^0.1.27",
