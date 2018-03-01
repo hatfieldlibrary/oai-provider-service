@@ -1,6 +1,6 @@
 # OAI-PMH Service
 
-This Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 providers. We are using a specific
+This Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers. We are using a specific
 configuration for one of our local services `(tagger-provider)`. The service is configured with a second, 
 very simple provider with dummy data `(sample-provider)`.  
 
