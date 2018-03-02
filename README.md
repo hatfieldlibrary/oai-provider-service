@@ -12,7 +12,7 @@ The `tagger-provider` repository implements a Domain Access Object (DAO) with my
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) database.  The provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  ListSets is not supported.  
 
-The `sample-provider` repository DAO returns dummy data. The sample repository modules use this data to provide mock OAI-PMH services that
+The `sample-provider` implements DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
  are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the
  OAI-PMH Service can serve multiple providers via different Express routes.  It can also be used as the template for implementing a another, 
  new OAI-PHM provider with real data.
