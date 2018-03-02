@@ -1,12 +1,12 @@
 # OAI-PMH Service
 
-OAI-PMH Service is a Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers. 
+OAI-PMH Service is a Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers.
+
+OAI-PMH Service is based on the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
+The National Library of Finland. 
 
 We are using a specific data provider configuration for one of our local services `(tagger-provider)`. This repository
  includes a second, very simple provider with dummy data `(sample-provider)`.  
-
-OAI-PMH Service is based on the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
-The National Library of Finland.
 
 The `tagger-provider` repository implements a Domain Access Object (DAO) with mysql support for querying the 
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) database.  The provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
