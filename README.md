@@ -8,6 +8,12 @@ The National Library of Finland.
 This project includes a data provider configuration for one of our local services `(tagger-provider)`. The project
  includes a second, very simple provider with dummy data `(sample-provider)`.  
 
+## Dependenices
+
+* Node 8.9.4+
+* Typescript 2.7.2+
+* npm 5.6+
+
 ## Capabilities
 
 The `tagger-provider` repository implements a Domain Access Object (DAO) with mysql support for querying the 
