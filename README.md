@@ -14,7 +14,7 @@ The `tagger-provider` repository implements a Domain Access Object (DAO) with my
 
 The `sample-provider` implements a DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
  are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the
- OAI-PMH Service can serve multiple providers via different Express routes.  It can also be used as the template for implementing a another, 
+ OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another, 
  new OAI-PHM provider with real data.
 
 ## Install It
