@@ -22,23 +22,11 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
+import * as pino from 'pino';
 
-gulp.task("build", function () {
-    return gulp.src("app/**/*.ts")
-        .pipe(ts({
-            noImplicitAny: true,
-            target: "es6",
-            module: "commonjs",
-
-        })).pipe(gulp.dest("dist"));
+const logger: any = pino({
+  name: process.env.APP_ID,
+  level: process.env.LOG_LEVEL,
 });
 
-gulp.task("copy", function() {
-    return gulp.src(".env")
-        .pipe(gulp.dest("dist"));
-});
-
-
-
+export default logger;

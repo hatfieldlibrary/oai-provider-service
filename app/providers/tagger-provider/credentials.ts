@@ -22,23 +22,21 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
+/**
+ * Parses the JSON content of the tagger database
+ * configuration file and exports the Javascript object.
+ *
+ * The location of the configuration file is defined in
+ * .env
+ */
+import logger from "../../server/logger";
+import * as fs from 'fs';
 
-gulp.task("build", function () {
-    return gulp.src("app/**/*.ts")
-        .pipe(ts({
-            noImplicitAny: true,
-            target: "es6",
-            module: "commonjs",
+const credFile = process.env.TAGGER_CONFIGURATION;
 
-        })).pipe(gulp.dest("dist"));
-});
+logger.debug(credFile);
 
-gulp.task("copy", function() {
-    return gulp.src(".env")
-        .pipe(gulp.dest("dist"));
-});
+const credentials = JSON.parse(fs.readFileSync(credFile, 'utf8'));
 
-
+export default credentials;
 

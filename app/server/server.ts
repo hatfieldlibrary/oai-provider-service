@@ -22,23 +22,32 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
+import * as express from 'express';
+import { Application } from 'express';
+import * as bodyParser from 'body-parser';
+import * as http from 'http';
+import * as os from 'os';
+import logger from './logger';
 
-gulp.task("build", function () {
-    return gulp.src("app/**/*.ts")
-        .pipe(ts({
-            noImplicitAny: true,
-            target: "es6",
-            module: "commonjs",
+const app = express();
 
-        })).pipe(gulp.dest("dist"));
-});
+export default class ExpressServer {
+  constructor() {
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+  }
 
-gulp.task("copy", function() {
-    return gulp.src(".env")
-        .pipe(gulp.dest("dist"));
-});
+  router(routes: (app: Application) => void): ExpressServer {
+    routes(app);
+    return this;
+  }
+
+  listen(port: number = parseInt(process.env.PORT)): Application {
+    const welcome = (port: number) => () => logger.info(`up and running in ${process.env.NODE_ENV || 
+      'development'} @: ${os.hostname() } on port: ${port}}`);
+    http.createServer(app).listen(port, welcome(port));
+    return app;
+  }
 
 
-
+}

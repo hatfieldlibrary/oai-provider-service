@@ -22,23 +22,13 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
+import { Application } from 'express';
+import * as tagger from "../providers/controllers/tagger";
+import * as sample from "../providers/controllers/sample";
+import logger from "./logger";
 
-gulp.task("build", function () {
-    return gulp.src("app/**/*.ts")
-        .pipe(ts({
-            noImplicitAny: true,
-            target: "es6",
-            module: "commonjs",
-
-        })).pipe(gulp.dest("dist"));
-});
-
-gulp.task("copy", function() {
-    return gulp.src(".env")
-        .pipe(gulp.dest("dist"));
-});
-
-
-
+export default function routes(app: Application): void {
+  logger.debug('Setting express routes for OAI providers.');
+  app.get('/tagger/oai', tagger.oai);
+  app.get('/sample/oai', sample.oai);
+};

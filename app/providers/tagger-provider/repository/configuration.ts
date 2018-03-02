@@ -22,23 +22,16 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
+import {OaiService} from "../../core/oai-service";
+import {ProviderConfiguration} from "../../core/core-oai-provider";
 
-gulp.task("build", function () {
-    return gulp.src("app/**/*.ts")
-        .pipe(ts({
-            noImplicitAny: true,
-            target: "es6",
-            module: "commonjs",
+export class Configuration implements ProviderConfiguration {
 
-        })).pipe(gulp.dest("dist"));
-});
+    public repositoryName: string = "Academic Commons";
+    public baseURL: string =  "https://libmedia.willamette.edu/commons/oai";
+    public protocolVersion: string = '2.0';
+    public adminEmail: string = "mspalti@willamette.edu";
+    public port: number = 0;
+    public description: string = "";
 
-gulp.task("copy", function() {
-    return gulp.src(".env")
-        .pipe(gulp.dest("dist"));
-});
-
-
-
+}

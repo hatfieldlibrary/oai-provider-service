@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "cd dist && node index",
-    "compile": "gulp build && gulp copy && gulp copy-libraries",
+    "compile": "gulp build && gulp copy",
     "dev": "gulp build && gulp copy && cd dist && node index | pino -o 'short'",
     "test": "node build.js && mocha test/**/*.ts --exit"
   },
