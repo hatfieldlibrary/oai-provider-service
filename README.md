@@ -1,19 +1,21 @@
 # OAI-PMH Service
 
-This Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers. We are using a specific
-configuration for one of our local services `(tagger-provider)`. The service is configured with a second, 
-very simple provider with dummy data `(sample-provider)`.  
+OAI-PMH Service is a Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers. 
 
-This code is based on the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
+We are using a specific data provider configuration for one of our local services `(tagger-provider)`. This repository
+ includes a second, very simple provider with dummy data `(sample-provider)`.  
+
+OAI-PMH Service is based on the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
 The National Library of Finland.
 
-The `tagger-provider` uses a Domain Access Object (DAO) with mysql support for querying the 
+The `tagger-provider` repository implements a Domain Access Object (DAO) with mysql support for querying the 
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) database.  The provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  ListSets is not supported.  
 
-The `sample-provider` DAO returns dummy data. Repository modules use this data to provide the same OAI-PMH services as `tagger-provider`
--- minus selective harvesting.  The main purpose of `sample-provider` is to verify that the OAI-PMH Service can serve multiple providers via different 
-Express routes.  It can also be used as the template for implementing a another, new OAI-PHM provider for real data.
+The `sample-provider` repository DAO returns dummy data. The sample repository modules use this data to provide mock OAI-PMH services that
+ are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the
+ OAI-PMH Service can serve multiple providers via different Express routes.  It can also be used as the template for implementing a another, 
+ new OAI-PHM provider with real data.
 
 ## Install It
 ```
