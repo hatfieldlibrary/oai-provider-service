@@ -16,7 +16,7 @@ This project includes a data provider configuration for one of our local service
 
 ## Capabilities
 
-The `tagger-provider` repository implements a Domain Access Object (DAO) with mysql support for querying the 
+The `tagger-provider` repository implements a data access object (DAO) with mysql support for querying the 
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) database.  The provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  ListSets is not supported.  
 
