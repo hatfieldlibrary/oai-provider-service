@@ -12,7 +12,7 @@ This project includes a data provider configuration for one of our local service
 
 * Node 8.9.4+
 * Typescript 2.7.2+
-* npm 5.6+
+* npm 5.6.0+
 
 ## Capabilities
 
