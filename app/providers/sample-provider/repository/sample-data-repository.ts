@@ -75,14 +75,9 @@
  */
 
 
-import {
-    DataRepository, DELETED_RECORDS_SUPPORT, ERRORS, HARVESTING_GRANULARITY,
-    METADATA_FORMAT_DC
-} from "../../core/core-oai-provider";
+import { DataRepository, ERRORS, METADATA_FORMAT_DC } from "../../core/core-oai-provider";
 import logger from "../../../server/logger";
 import {SampleDaoConnector} from "../dao/sample-dao";
-
-const EARLIEST_DATE = '2017-01-00T03:24:00';
 
 /**
  * Factory function to create a oai service
@@ -102,17 +97,6 @@ export function factory(options = {}): DataRepository {
 
         resumptionSupport: false,
 
-        /**
-         * @typedef {function} getCapabilities
-         * @returns {Promise<capabilities>} Provider's capabilities
-         */
-        getCapabilities: () => {
-            return Promise.resolve({
-                deletedRecordsSupport: DELETED_RECORDS_SUPPORT.NO,
-                harvestingGranularity: HARVESTING_GRANULARITY.DATETIME,
-                earliestDatestamp: EARLIEST_DATE
-            });
-        },
         /**
          * @typedef {function} getRecord
          * @param {string} identifier - xxx

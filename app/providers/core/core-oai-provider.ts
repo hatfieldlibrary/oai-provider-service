@@ -23,7 +23,7 @@
  */
 
 import {generateException, generateResponse} from "./oai-response";
-import {OaiService} from './oai-service';
+import {OaiService, ProviderConfiguration} from './oai-service';
 import logger from "../../server/logger";
 
 interface Formats {
@@ -73,25 +73,14 @@ export enum METADATA_FORMAT_DC {
 }
 
 /**
- * The interface for the OAI provider description.  Used in the
- * Identify response.
- */
-export interface ProviderConfiguration {
-    repositoryName: string;
-    baseURL: string;
-    protocolVersion: string;
-    adminEmail: string;
-    port: number;
-    description: string;
-}
-
-/**
  * Interface for the class that maps between DAO data and
  * formatted OAI xml.
  */
 export interface ProviderDCMapper {
     mapOaiDcListRecords(records: any[]): any;
+
     mapOaiDcGetRecord(records: any): any;
+
     mapOaiDcListIdentifiers(records: any[]): any;
 
 }
@@ -139,7 +128,6 @@ export enum ExceptionCodes {
 export interface DataRepository {
     setSupport: boolean,
     resumptionSupport: boolean,
-    getCapabilities: any;
     getSets: any;
     getRecords: any;
     getMetadataFormats: any;
@@ -188,8 +176,6 @@ export class CoreOaiProvider {
     constructor(factory: any,
                 configuration: ProviderConfiguration,
                 mapper: ProviderDCMapper) {
-
-        logger.info('Initializing the core OAI provider with: ' + configuration.repositoryName);
 
         this.oaiService = new OaiService(factory, configuration);
         this.parameters = this.oaiService.getParameters();
@@ -441,20 +427,18 @@ export class CoreOaiProvider {
                 if (queryParameters.length > 1) {
                     resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
                 } else {
-                    this.oaiService.getProvider().getCapabilities().then((capabilities: any) => {
-                        const responseContent = {
-                            Identify: [
-                                {repositoryName: this.parameters.repositoryName},
-                                {baseURL: this.parameters.baseURL},
-                                {protocolVersion: this.parameters.protocolVersion},
-                                {adminEmail: this.parameters.adminEmail},
-                                {earliestDatestamp: capabilities.earliestDatestamp},
-                                {deletedRecord: capabilities.deletedRecordsSupport},
-                                {granularity: capabilities.harvestingGranularity}
-                            ]
-                        };
-                        resolve(generateResponse(query, this.parameters.baseURL, responseContent));
-                    });
+                    const responseContent = {
+                        Identify: [
+                            {repositoryName: this.parameters.repositoryName},
+                            {baseURL: this.parameters.baseURL},
+                            {protocolVersion: this.parameters.protocolVersion},
+                            {adminEmail: this.parameters.adminEmail},
+                            {earliestDatestamp: this.parameters.earliestDatestamp},
+                            {deletedRecord: this.parameters.deletedRecord},
+                            {granularity: this.parameters.granularity}
+                        ]
+                    };
+                    resolve(generateResponse(query, this.parameters.baseURL, responseContent));
                 }
             } catch (err) {
                 logger.log(err);

@@ -22,8 +22,8 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {OaiService} from "../../core/oai-service";
-import {ProviderConfiguration} from "../../core/core-oai-provider";
+import {DELETED_RECORDS_SUPPORT, HARVESTING_GRANULARITY} from "../../core/core-oai-provider";
+import {ProviderConfiguration} from "../../core/oai-service";
 
 export class Configuration implements ProviderConfiguration {
 
@@ -32,6 +32,9 @@ export class Configuration implements ProviderConfiguration {
     public protocolVersion: string = '2.0';
     public adminEmail: string = "mspalti@willamette.edu";
     public port: number = 0;
-    public description: string = "";
+    public description: string = "A clearinghouse for digital projects from Willamette University.";
+    public deletedRecord: string = DELETED_RECORDS_SUPPORT.NO;
+    public granularity: string = HARVESTING_GRANULARITY.DATETIME;
+    public earliestDatestamp: string = '2017-01-00T03:24:00';
 
 }

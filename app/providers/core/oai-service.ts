@@ -23,7 +23,23 @@
  */
 
 import logger from '../../server/logger';
-import {DataRepository, ProviderConfiguration} from "./core-oai-provider";
+import {DataRepository} from "./core-oai-provider";
+
+/**
+ * The interface for the OAI provider description.  Used in the
+ * Identify response.
+ */
+export interface ProviderConfiguration {
+    repositoryName: string;
+    baseURL: string;
+    protocolVersion: string;
+    adminEmail: string;
+    port: number;
+    description: string;
+    deletedRecord: string;
+    granularity: string;
+    earliestDatestamp: string;
+}
 
 export class OaiService {
 
@@ -33,6 +49,7 @@ export class OaiService {
 
     parameters: ProviderConfiguration;
 
+
     MANDATORY_PARAMETERS = [
         'repositoryName',
         'baseURL',
@@ -41,15 +58,13 @@ export class OaiService {
         'deletedRecord',
         'granularity',
         'earliestDatestamp'];
+
     DEFAULT_PARAMETERS = {
         port: 3000,
-        description: 'OAI-PMH Service',
-        oaiService: {}
+        description: 'OAI-PMH Service'
     };
 
     public constructor(factory: any, configuration: ProviderConfiguration) {
-
-        logger.debug('Initializing the core OAI service.');
 
         this.parameters = this.initParameters(configuration);
         this.oaiProvider = factory(this.parameters);
@@ -63,41 +78,13 @@ export class OaiService {
         });
 
         if (missingParameters.length > 0) {
-            throw new Error('Mandatory parameters missing: ' + missingParameters.join(':'));
-        } else {
-            parameters = (<any>Object).assign(JSON.parse(JSON.stringify(this.DEFAULT_PARAMETERS)),
-                JSON.parse(JSON.stringify(parameters)));
-            const invalidParameters = Object.keys(parameters).filter(key => {
-                let result;
-
-                switch (key) {
-                    case 'repositoryName':
-                        result = typeof parameters[key] !== 'string';
-                        break;
-                    case 'baseURL':
-                        result = typeof parameters[key] !== 'string';
-                        break;
-                    case 'port':
-                        result = typeof parameters[key] !== 'number';
-                        break;
-                    case 'adminEmail':
-                        result = typeof parameters[key] !== 'string' && !Array.isArray(parameters[key]);
-                        break;
-                    case 'description':
-                        result = Object.hasOwnProperty.call(parameters, key) && typeof parameters[key] !== 'string';
-                        break;
-                    default:
-                        break;
-                }
-                return result;
-            });
-
-            if (invalidParameters.length > 0) {
-                throw new Error('Invalid parameters: ' + invalidParameters.join(':'));
-            } else {
-                return parameters;
-            }
+            throw new Error('Mandatory parameters missing: ' + missingParameters.join(' : '));
         }
+
+        logger.debug('Initializing the core OAI service for ' + parameters.repositoryName);
+
+        return parameters;
+
     }
 
     /**
@@ -115,6 +102,7 @@ export class OaiService {
     public getProvider(): DataRepository {
         return this.oaiProvider;
     }
+
 }
 
 
