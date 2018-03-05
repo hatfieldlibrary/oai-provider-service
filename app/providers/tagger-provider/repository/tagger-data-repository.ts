@@ -23,41 +23,8 @@
  */
 
 /**
- * @typedef {Object} metadataFormat
- * @property {string} prefix
- * @property {string} url
- */
-
-/**
- * @typedef {number} error
- * @desc A bit field consisting of {@link ERRORS} values
- */
-
-/**
- * @typedef {Object} getSetsResponse
- * @property {set[]} sets
- * @property {flowControl} [flowControl]
- */
-
-/**
- * @typedef {Object} set
- * @property {string} spec
- * @property {string} name
- * @property {string} [description]
- */
-
-/**
- * @typedef {Object} flowControl
- * @property {string} resumptionToken
- * @property {Date} [expirationDate]
- * @property {number} [completeListSize]
- * @property {number} [cursor]
- */
-
-/**
  * @typedef {Object} record
- * @property {string} resumptionToken
- * @property {number}id
+ * @property {number} id
  * @property {string} title
  * @property {string} image
  * @property {string} url
@@ -74,7 +41,6 @@
  * @property {string} searchUrl
  */
 
-
 import {MysqlConnector} from "../dao/mysql-dao";
 import {
     DataRepository, ERRORS, METADATA_FORMAT_DC
@@ -82,47 +48,41 @@ import {
 import logger from "../../../server/logger";
 
 /**
- * Factory function to create a oai service
- * @param {Object} [options={}] - Implementation-specific options
- * @param {{}} options
+ * Factory function to create an oai provider
+ * @param {Object} [options={}] - Implementation-specific configuration
  * @returns {DataRepository}
  */
 export function factory(options = {}): DataRepository {
 
     const mysql: MysqlConnector = MysqlConnector.getInstance();
 
-    logger.debug('Getting the Tagger repository.');
+    logger.debug('Creating the Tagger repository.');
 
     return Object.freeze({
 
+        /**
+         * Defines whether this repository supports sets.
+         */
         setSupport: false,
 
+        /**
+         * Defines whether this repository supports resumption tokens.
+         */
         resumptionSupport: false,
 
         /**
-         * @typedef {function} getCapabilities
-         * @returns {Promise<capabilities>} Provider's capabilities
-         */
-        // getCapabilities: () => {
-        //     return Promise.resolve({
-        //         deletedRecordsSupport: DELETED_RECORDS_SUPPORT.NO,
-        //         harvestingGranularity: HARVESTING_GRANULARITY.DATETIME,
-        //         earliestDatestamp: EARLIEST_DATE
-        //     });
-        // },
-        /**
-         * @typedef {function} getRecord
-         * @param {string} identifier - xxx
-         * @param {string} metadataPrefix - xxx
-         * @returns {Promise<record>} Resolves with a {@link record}
+         * Get individual record.
+         * @param parameters (identifier, metadataPrefix)
+         * @returns {Promise<any>} Resolves with a {@link record}
          */
         getRecord: (parameters: any) => {
             return mysql.getRecord(parameters);
         },
+
         /**
-         * Returns the metadata formats supported by this repository.
+         * Returns the metadata formats supported by this repository (DC only)
          * @param {string} identifier (not used)
-         * @returns {Promise<{prefix: string; schema: string; namespace: string}[]>}
+         * @returns {Promise<METADATA_FORMAT_DC[]>}
          */
         getMetadataFormats: (identifier: string = undefined) => {
             // Since only DC is supported, safe to ignore the identifier param.
@@ -131,43 +91,28 @@ export function factory(options = {}): DataRepository {
 
         /**
          * Used to retrieve the set structure of a repository. Not supported currently.
-         * Returns response indicating that the Commons repository does not have a set hierarchy.
          * @param {string} resumptionToken
          * @returns {Promise<never>}
          */
         getSets: (resumptionToken: string = undefined) => {
             return Promise.reject(resumptionToken ? ERRORS.badResumptionToken : ERRORS.noSetHierarchy);
         },
+
         /**
-         * @typedef {Object} getRecordsResponse
-         * @property {record[]} records - xxx
-         * @property {flowControl} [flowControl]
-         */
-        /**
-         * @typedef {Object} getRecordsParameters
-         * @property {string} metadataPrefix - A {@link metadataFormat} prefix
-         * @property {Date} [from] - xxx
-         * @property {Date} [until] - xxx
-         * @property {string} [set] - A {@link set} spec
-         * @property {string} [resumptionToken] - Optional resumption token to get the next partition of records
-         */
-        /**
-         * @typedef {function} getIdentifiers
-         * @param {getRecordsParameters} parameters - xxx
-         * @returns {Promise<getRecordsResponse, error>} Actual record metadata is not contained in the response
+         * Gets list of identifiers.
+         * @param parameters (metadataPrefix, from (optional), until (optional), set (not supported),
+         *        resumptionToken (not supported))
+         * @returns {Promise<any>} an array of {@link record}
          */
         getIdentifiers: (parameters: any) => {
             return mysql.identifiersQuery(parameters);
         },
+
         /**
-         * @typedef {function} getRecords
-         * @param {Object} parameters - xxx
-         * @param {string} metadataPrefix - A {@link metadataFormat} prefix
-         * @param {Date} [from] - xxx
-         * @param {Date} [until] - xxx
-         * @param {string} [set] - A {@link set} spec
-         * @param {string} [resumptionToken] - Optional resumption token to get the next partition of records
-         * @returns {Promise<getRecordsResponse, error>} An array of records
+         * Gets list of records
+         * @param parameters (metadataPrefix, from (optional), until (optional), set (not supported),
+         *        resumptionToken (not supported))
+         * @returns {Promise<any>} an array of {@link record}
          */
         getRecords: (parameters: any) => {
             return mysql.recordsQuery(parameters);

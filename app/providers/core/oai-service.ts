@@ -65,6 +65,12 @@ export class OaiService {
         description: 'OAI-PMH Service'
     };
 
+    /**
+     * The service constructor requires a factory method and configuration
+     * parameters as defined by an OAI data provider.
+     * @param factory
+     * @param {ProviderConfiguration} configuration
+     */
     public constructor(factory: any, configuration: ProviderConfiguration) {
 
         this.parameters = this.initParameters(configuration);
@@ -89,7 +95,7 @@ export class OaiService {
     }
 
     /**
-     * Returns information about the repository.
+     * Returns the repository configuration for this instance.
      * @returns {ProviderConfiguration}
      */
     public getParameters(): ProviderConfiguration {
@@ -97,7 +103,7 @@ export class OaiService {
     }
 
     /**
-     * Returns the OAI repository configured with this service.
+     * Returns the OAI data provider configured for this instance.
      * @returns {DataRepository}
      */
     public getProvider(): DataRepository {
