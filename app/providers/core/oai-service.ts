@@ -50,21 +50,6 @@ export class OaiService {
 
     parameters: ProviderConfiguration;
 
-
-    MANDATORY_PARAMETERS = [
-        'repositoryName',
-        'baseURL',
-        'adminEmail',
-        'protocolVersion',
-        'deletedRecord',
-        'granularity',
-        'earliestDatestamp'];
-
-    DEFAULT_PARAMETERS = {
-        port: 3000,
-        description: 'OAI-PMH Service'
-    };
-
     /**
      * The service constructor requires a factory method and configuration
      * parameters as defined by an OAI data provider.
@@ -73,24 +58,10 @@ export class OaiService {
      */
     public constructor(factory: any, configuration: ProviderConfiguration) {
 
-        this.parameters = this.initParameters(configuration);
+        logger.debug("Creating the OAI data provider for: " + configuration.repositoryName);
+
+        this.parameters = configuration;
         this.oaiProvider = factory(this.parameters);
-
-    }
-
-    private initParameters(parameters: ProviderConfiguration): any {
-
-        const missingParameters: string[] = this.MANDATORY_PARAMETERS.filter(key => {
-            return !Object.hasOwnProperty.call(parameters, key);
-        });
-
-        if (missingParameters.length > 0) {
-            throw new Error('Mandatory parameters missing: ' + missingParameters.join(' : '));
-        }
-
-        logger.debug('Initializing the core OAI service for ' + parameters.repositoryName);
-
-        return parameters;
 
     }
 
