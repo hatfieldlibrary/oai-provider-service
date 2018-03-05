@@ -26,8 +26,9 @@ import logger from '../../server/logger';
 import {DataRepository} from "./core-oai-provider";
 
 /**
- * The interface for the OAI provider description.  Used in the
- * Identify response.
+ * The interface for the OAI provider description. All fields are
+ * mandatory.  Define your configuration in separate repository
+ * Configuration classes.
  */
 export interface ProviderConfiguration {
     repositoryName: string;
