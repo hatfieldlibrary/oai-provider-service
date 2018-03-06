@@ -44,7 +44,7 @@ npm run dev
 * [`http://localhost/3000/sample/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`](http://localhost/3000/tagger/oai?verb=ListIdentifiers&metadataPrefix=oai_dc)
 * [`http://localhost:3000/sample/oai?verb=ListRecords&metadataPrefix=oai_dc`](http://localhost:3000/sample/oai?verb=ListRecords&metadataPrefix=oai_dc)
 
-#### Run in *production* mode:
+### Run in *production* mode:
 
 At the simplest level:
 ```
@@ -57,7 +57,18 @@ The gulp tasks compile Typescript and copy files to `dist`.
 The project can be deployed to a production server and started with `node index` from within `dist`. Runtime configurations
 can be adjusted using `.env`. We typically run as daemon with `forever` or anther tool to assure the script runs continuously.  
 
-Will be adding a Dockerfile soon.
+### Docker Container
+
+The Dockerfile can be used to create a Docker image.  An image can be created using:
+
+`docker build -t oai-service .`
+
+The image will run with something like the following command:
+
+`docker run -p 3000:3000 -v /etc/tagger-provider:/etc/tagger-provider oai-service`
+
+Our `tagger-provider` service needs access to an external MySQL. We do not yet have the mysqld service working with the Docker
+image.
 
 
 
