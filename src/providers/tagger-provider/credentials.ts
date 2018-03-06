@@ -22,32 +22,26 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
-import { Application } from 'express';
-import * as bodyParser from 'body-parser';
-import * as http from 'http';
-import * as os from 'os';
-import logger from './logger';
+/**
+ * Parses the JSON contents of the tagger database
+ * credentials file and exports the object.
+ *
+ * The location of the credentials file on the file system
+ * is defined in .env
+ *
+ * We commit .env to version control since it contains no
+ * compromising information about the system.  Note that if
+ * you do add sensitive information to .env you will want
+ * to remove it from the version control before committing.
+ */
+import logger from "../../server/logger";
+import * as fs from 'fs';
 
-const app = express();
+const credFile = process.env.TAGGER_CONFIGURATION;
 
-export default class ExpressServer {
-  constructor() {
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-  }
+logger.debug(credFile);
 
-  router(routes: (app: Application) => void): ExpressServer {
-    routes(app);
-    return this;
-  }
+const credentials = JSON.parse(fs.readFileSync(credFile, 'utf8'));
 
-  listen(port: number = parseInt(process.env.PORT)): Application {
-    const welcome = (port: number) => () => logger.info(`up and running in ${process.env.NODE_ENV || 
-      'development'} @: ${os.hostname() } on port: ${port}}`);
-    http.createServer(app).listen(port, welcome(port));
-    return app;
-  }
+export default credentials;
 
-
-}

@@ -25,8 +25,10 @@
 import './server/env';
 import Server from './server/server';
 import routes from './server/routes';
+import config from "./server/host-config";
 
-const port = parseInt(process.env.PORT);
+const port = config.port;
+
 export default new Server()
   .router(routes)
   .listen(port);

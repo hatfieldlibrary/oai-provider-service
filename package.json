@@ -8,8 +8,8 @@
     "node": ">=8.9.4"
   },
   "scripts": {
-    "start": "cd dist && node index",
-    "compile": "gulp build && gulp copy",
+    "start": "cd dist && NODE_ENV=production node index",
+    "compile": "gulp build && gulp copy-production",
     "dev": "gulp build && gulp copy && cd dist && node index | pino -o 'short'",
     "test": "node build.js && mocha test/**/*.ts --exit"
   },

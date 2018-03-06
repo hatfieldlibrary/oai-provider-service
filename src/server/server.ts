@@ -22,28 +22,41 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
+import * as express from 'express';
+import { Application } from 'express';
+import * as bodyParser from 'body-parser';
+import * as http from 'http';
+import * as os from 'os';
+import logger from './logger';
+import config from "./host-config";
 
-gulp.task("build", function () {
-    return gulp.src("src/**/*.ts")
-        .pipe(ts({
-            noImplicitAny: true,
-            target: "es6",
-            module: "commonjs",
-
-        })).pipe(gulp.dest("dist"));
-});
-
-gulp.task("copy", function() {
-    return gulp.src([".env"])
-        .pipe(gulp.dest("dist"));
-});
-
-gulp.task("copy-production", function() {
-    return gulp.src(["production/.env"])
-        .pipe(gulp.dest("dist"));
-});
+const app = express();
 
 
+export default class ExpressServer {
 
+  port: number = 0;
+
+  constructor() {
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    this.port = config.port;
+
+  }
+
+  router(routes: (app: Application) => void): ExpressServer {
+    routes(app);
+    return this;
+  }
+
+
+  listen(port: number): Application {
+    const welcome = (port: number) => () => logger.info(`up and running in ${process.env.NODE_ENV || 
+      'development'} @: ${os.hostname() } on port: ${port}}`);
+    http.createServer(app).listen(port, welcome(port));
+    return app;
+  }
+
+
+}

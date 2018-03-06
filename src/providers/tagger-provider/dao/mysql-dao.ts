@@ -41,6 +41,11 @@ export class MysqlConnector {
 
         logger.debug('Setting up the Tagger mysql connection pool.');
 
+        logger.debug("host: " + credentials.host);
+        logger.debug("user: " + credentials.user);
+        logger.debug("password: " + credentials.password);
+        logger.debug("database: " + credentials.database);
+
         this.pool = mysql.createPool({
             host: credentials.host,
             user: credentials.user,
