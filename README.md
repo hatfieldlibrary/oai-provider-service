@@ -67,7 +67,7 @@ The image will run with something like the following command:
 
 `docker run -p 3000:3000 -v /etc/tagger-provider:/etc/tagger-provider oai-service`
 
-Our `tagger-provider` service needs access to an external MySQL. We do not yet have the mysqld service working with the Docker
+Our `tagger-provider` service needs access to an external MySQL database. We do not yet have the mysqld service working with the Docker
 image.
 
 
