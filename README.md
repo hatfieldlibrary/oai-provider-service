@@ -37,7 +37,7 @@ npm install
 npm run dev
 ```
 
-### Routes:
+#### Routes:
 
 The Express server will start on default port 3000.  You should be able to access the sample repository 
 using these links.
@@ -47,6 +47,13 @@ using these links.
 * [`http://localhost:3000/sample/oai?verb=GetRecord&identifier=1&metadataPrefix=oai_dc`](http://localhost:3000/sample/oai?verb=GetRecord&identifier=1&metadataPrefix=oai_dc)
 * [`http://localhost/3000/sample/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`](http://localhost/3000/tagger/oai?verb=ListIdentifiers&metadataPrefix=oai_dc)
 * [`http://localhost:3000/sample/oai?verb=ListRecords&metadataPrefix=oai_dc`](http://localhost:3000/sample/oai?verb=ListRecords&metadataPrefix=oai_dc)
+
+#### Server Configuration
+
+You may require additional Express server configuration (e.g.: port number).  You can make changes in code, but once 
+again you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
+for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
+
 
 ## Development
 
@@ -72,13 +79,6 @@ See `./providers/taggger-provider/credentials.ts`.
 * You can specify the location of your external credential files using `.env`. Note that there are two `.env` files: 
 one in the root directory for development, and a second in `./production`. The second file will be used for the compiled
 application.  See next section.
-
-#### Server Configuration
-
-You may require additional Express server configuration (e.g.: port number).  You can make changes in code, but once 
-again you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
-for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
-
 
 ## Run in *production* mode:
 
