@@ -73,9 +73,9 @@ See `./providers/taggger-provider/credentials.ts`.
 one in the root directory for development, and a second in `./production`. The second file will be used for the compiled
 application.  See next section.
 
-Finally, you may need additional Express server configuration (e.g.: port number).  You can do this in code, but once 
+Finally, you may require additional Express server configuration (e.g.: port number).  You can make changes in code, but once 
 again you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
-for a peak at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
+for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
 
 
 ### Run in *production* mode:
