@@ -48,7 +48,7 @@ using these links. For suggestions on how to configure the default port, see the
 * [`http://localhost/3000/sample/oai?verb=ListIdentifiers&metadataPrefix=oai_dc`](http://localhost/3000/tagger/oai?verb=ListIdentifiers&metadataPrefix=oai_dc)
 * [`http://localhost:3000/sample/oai?verb=ListRecords&metadataPrefix=oai_dc`](http://localhost:3000/sample/oai?verb=ListRecords&metadataPrefix=oai_dc)
 
-### Development
+## Development
 
 If you want to work on a new OAI provider, a good starting point would be to copy and rename the `./providers/sample-provider` 
  directory. 
