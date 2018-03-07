@@ -65,17 +65,25 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="oai-pmh-service">OAI-PMH Service</h1>
-				<p>This Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers. We are using a specific
-					configuration for one of our local services <code>(tagger-provider)</code>. The service is configured with a second,
-				very simple provider with dummy data <code>(sample-provider)</code>.  </p>
-				<p>This code is based on the <a href="https://github.com/NatLibFi/oai-pmh-server">Modular OAI-PMH Server</a>, University of Helsinki,
-				The National Library of Finland.</p>
-				<p>The <code>tagger-provider</code> uses a Domain Access Object (DAO) with mysql support for querying the
+				<p>OAI-PMH Service is a Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers.</p>
+				<p>OAI-PMH Service borrows from the <a href="https://github.com/NatLibFi/oai-pmh-server">Modular OAI-PMH Server</a>, University of Helsinki,
+				The National Library of Finland. </p>
+				<p>This project includes a data provider configuration for one of our local services <code>(tagger-provider)</code>. The project
+				includes a second, very simple provider with dummy data <code>(sample-provider)</code>.  </p>
+				<h2 id="dependenices">Dependenices</h2>
+				<ul>
+					<li>Node 8.9.4+</li>
+					<li>Typescript 2.7.2+</li>
+					<li>npm 5.6.0+</li>
+				</ul>
+				<h2 id="capabilities">Capabilities</h2>
+				<p>The <code>tagger-provider</code> repository implements a data access object (DAO) with mysql support for querying the
 					<a href="https://github.com/hatfieldlibrary/tagger-2">Tagger-2</a> database.  The provider supports <code>Identify</code>, <code>ListMetadataFormats</code>, <code>GetRecord</code>, <code>ListIdentifiers</code> and <code>ListRecords</code>. The optional
 				<code>from</code> and <code>until</code> arguments are supported for selective harvesting with <code>YYYY-MM-DDThh:mm:ssZ</code> granularity.  ListSets is not supported.  </p>
-				<p>The <code>sample-provider</code> DAO returns dummy data. Repository modules use this data to provide the same OAI-PMH services as <code>tagger-provider</code>
-					-- minus selective harvesting.  The main purpose of <code>sample-provider</code> is to verify that the OAI-PMH Service can serve multiple providers via different
-				Express routes.  It can also be used as the template for implementing a another, new OAI-PHM provider for real data.</p>
+				<p>The <code>sample-provider</code> implements a DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
+					are similar to<code>tagger-provider</code> -- minus the option of selective harvesting.  The main purpose of <code>sample-provider</code> is to verify that the
+					OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another,
+				new OAI-PHM provider with real data.</p>
 				<h2 id="install-it">Install It</h2>
 				<pre><code>npm <span class="hljs-keyword">install</span>
 </code></pre><h2 id="run-it">Run It</h2>
@@ -89,14 +97,20 @@
 					<li><a href="http://localhost/3000/tagger/oai?verb=ListIdentifiers&amp;metadataPrefix=oai_dc"><code>http://localhost/3000/sample/oai?verb=ListIdentifiers&amp;metadataPrefix=oai_dc</code></a></li>
 					<li><a href="http://localhost:3000/sample/oai?verb=ListRecords&amp;metadataPrefix=oai_dc"><code>http://localhost:3000/sample/oai?verb=ListRecords&amp;metadataPrefix=oai_dc</code></a></li>
 				</ul>
-				<h4 id="run-in-production-mode-">Run in <em>production</em> mode:</h4>
+				<h3 id="run-in-production-mode-">Run in <em>production</em> mode:</h3>
 				<p>At the simplest level:</p>
 				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> compile
 </span>npm start
 </code></pre><p>The gulp tasks compile Typescript and copy files to <code>dist</code>. </p>
 				<p>The project can be deployed to a production server and started with <code>node index</code> from within <code>dist</code>. Runtime configurations
 				can be adjusted using <code>.env</code>. We typically run as daemon with <code>forever</code> or anther tool to assure the script runs continuously.  </p>
-				<p>Will be adding a Dockerfile soon.</p>
+				<h3 id="docker-container">Docker Container</h3>
+				<p>The Dockerfile can be used to create a Docker image.  An image can be created using:</p>
+				<p><code>docker build -t oai-service .</code></p>
+				<p>The image will run with something like the following command:</p>
+				<p><code>docker run -p 3000:3000 -v /etc/tagger-provider:/etc/tagger-provider oai-service</code></p>
+				<p>Our <code>tagger-provider</code> service needs access to an external MySQL database. We do not yet have the mysqld service working with the Docker
+				image.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -105,8 +119,8 @@
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_providers_controllers_sample_.html">"providers/controllers/sample"</a>
@@ -159,11 +173,20 @@
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_providers_tagger_provider_repository_tagger_dc_mapper_.html">"providers/tagger-<wbr>provider/repository/tagger-<wbr>dc-<wbr>mapper"</a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_server_env_.html">"server/env"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_server_host_config_.html">"server/host-<wbr>config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_server_logger_.html">"server/logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_server_routes_.html">"server/routes"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_server_server_.html">"server/server"</a>
 					</li>
 				</ul>
 			</nav>

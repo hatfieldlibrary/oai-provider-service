@@ -69,6 +69,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The Tagger provider module configuration.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -80,7 +87,7 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a></li>
+					<li><a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -92,7 +99,10 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#adminemail" class="tsd-kind-icon">admin<wbr>Email</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#baseurl" class="tsd-kind-icon">baseURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#deletedrecord" class="tsd-kind-icon">deleted<wbr>Record</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#earliestdatestamp" class="tsd-kind-icon">earliest<wbr>Datestamp</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#granularity" class="tsd-kind-icon">granularity</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#port" class="tsd-kind-icon">port</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#protocolversion" class="tsd-kind-icon">protocol<wbr>Version</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_providers_tagger_provider_repository_configuration_.configuration.html#repositoryname" class="tsd-kind-icon">repository<wbr>Name</a></li>
@@ -108,9 +118,9 @@
 					<h3>admin<wbr>Email</h3>
 					<div class="tsd-signature tsd-kind-icon">admin<wbr>Email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;mspalti@willamette.edu&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html#adminemail">adminEmail</a></p>
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#adminemail">adminEmail</a></p>
 						<ul>
-							<li>Defined in providers/tagger-provider/repository/configuration.ts:33</li>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:36</li>
 						</ul>
 					</aside>
 				</section>
@@ -119,20 +129,53 @@
 					<h3>baseURL</h3>
 					<div class="tsd-signature tsd-kind-icon">baseURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;https://libmedia.willamette.edu/commons/oai&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html#baseurl">baseURL</a></p>
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#baseurl">baseURL</a></p>
 						<ul>
-							<li>Defined in providers/tagger-provider/repository/configuration.ts:31</li>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:34</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="deletedrecord" class="tsd-anchor"></a>
+					<h3>deleted<wbr>Record</h3>
+					<div class="tsd-signature tsd-kind-icon">deleted<wbr>Record<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;DELETED_RECORDS_SUPPORT.NO</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#deletedrecord">deletedRecord</a></p>
+						<ul>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:39</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="description" class="tsd-anchor"></a>
 					<h3>description</h3>
-					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;A clearinghouse for digital projects from Willamette University.&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html#description">description</a></p>
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#description">description</a></p>
 						<ul>
-							<li>Defined in providers/tagger-provider/repository/configuration.ts:35</li>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:38</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="earliestdatestamp" class="tsd-anchor"></a>
+					<h3>earliest<wbr>Datestamp</h3>
+					<div class="tsd-signature tsd-kind-icon">earliest<wbr>Datestamp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;2017-01-00T03:24:00&quot;</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#earliestdatestamp">earliestDatestamp</a></p>
+						<ul>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:41</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="granularity" class="tsd-anchor"></a>
+					<h3>granularity</h3>
+					<div class="tsd-signature tsd-kind-icon">granularity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;HARVESTING_GRANULARITY.DATETIME</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#granularity">granularity</a></p>
+						<ul>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:40</li>
 						</ul>
 					</aside>
 				</section>
@@ -141,9 +184,9 @@
 					<h3>port</h3>
 					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html#port">port</a></p>
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#port">port</a></p>
 						<ul>
-							<li>Defined in providers/tagger-provider/repository/configuration.ts:34</li>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:37</li>
 						</ul>
 					</aside>
 				</section>
@@ -152,9 +195,9 @@
 					<h3>protocol<wbr>Version</h3>
 					<div class="tsd-signature tsd-kind-icon">protocol<wbr>Version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;2.0&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html#protocolversion">protocolVersion</a></p>
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#protocolversion">protocolVersion</a></p>
 						<ul>
-							<li>Defined in providers/tagger-provider/repository/configuration.ts:32</li>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:35</li>
 						</ul>
 					</aside>
 				</section>
@@ -163,9 +206,9 @@
 					<h3>repository<wbr>Name</h3>
 					<div class="tsd-signature tsd-kind-icon">repository<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Academic Commons&quot;</span></div>
 					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html#repositoryname">repositoryName</a></p>
+						<p>Implementation of <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>.<a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html#repositoryname">repositoryName</a></p>
 						<ul>
-							<li>Defined in providers/tagger-provider/repository/configuration.ts:30</li>
+							<li>Defined in providers/tagger-provider/repository/configuration.ts:33</li>
 						</ul>
 					</aside>
 				</section>
@@ -177,8 +220,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_controllers_sample_.html">"providers/controllers/sample"</a>
@@ -231,11 +274,20 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_tagger_provider_repository_tagger_dc_mapper_.html">"providers/tagger-<wbr>provider/repository/tagger-<wbr>dc-<wbr>mapper"</a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_env_.html">"server/env"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_host_config_.html">"server/host-<wbr>config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_server_logger_.html">"server/logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_routes_.html">"server/routes"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_server_.html">"server/server"</a>
 					</li>
 				</ul>
 			</nav>
@@ -253,7 +305,16 @@
 								<a href="_providers_tagger_provider_repository_configuration_.configuration.html#baseurl" class="tsd-kind-icon">baseURL</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_providers_tagger_provider_repository_configuration_.configuration.html#deletedrecord" class="tsd-kind-icon">deleted<wbr>Record</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_providers_tagger_provider_repository_configuration_.configuration.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_providers_tagger_provider_repository_configuration_.configuration.html#earliestdatestamp" class="tsd-kind-icon">earliest<wbr>Datestamp</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_providers_tagger_provider_repository_configuration_.configuration.html#granularity" class="tsd-kind-icon">granularity</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_providers_tagger_provider_repository_configuration_.configuration.html#port" class="tsd-kind-icon">port</a>

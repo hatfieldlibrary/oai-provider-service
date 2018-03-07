@@ -52,7 +52,7 @@ export class OaiService {
 
     /**
      * The service constructor requires a factory method and configuration
-     * parameters as defined by an OAI data provider.
+     * parameters for an repository provider module.
      * @param factory
      * @param {ProviderConfiguration} configuration
      */

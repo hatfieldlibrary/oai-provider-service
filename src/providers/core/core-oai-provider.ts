@@ -162,9 +162,8 @@ export interface MetadataFormatParameters {
 }
 
 /**
- * The core OAI provider class requires an instance of the OAI
- * service (oai-service) that is configured with a data repository
- * (tagger-data-repository).
+ * The core OAI provider class instantiates an `OaiService` that has been configured with
+ * a single data repository module.
  */
 export class CoreOaiProvider {
 
@@ -173,6 +172,12 @@ export class CoreOaiProvider {
     mapper: ProviderDCMapper;
     possibleParams = ['verb', 'from', 'until', 'metadataPrefix', 'set', 'resumptionToken'];
 
+    /**
+     * The constructor initializes the core provider with a single provider module.
+     * @param factory the provider module's factory method
+     * @param {ProviderConfiguration} the provider module configuration
+     * @param {ProviderDCMapper} the provider module mapper (typically maps to Dublin Core)
+     */
     constructor(factory: any,
                 configuration: ProviderConfiguration,
                 mapper: ProviderDCMapper) {
@@ -183,16 +188,13 @@ export class CoreOaiProvider {
     }
 
     /**
-     * Handle OAI requests. The methods return configuration values or
-     * retrieve data from the repository provider (tagger-oai-provider).
-     * Data from the provider is mapped to json (tagger-dc-mapper) and
-     * returned as xml (oai-response).
+     * Handle OAI requests. These methods return OAI provider configuration,
+     * data, or error responses from the repository provider module that has been
+     * configured in `OaiService`.
      */
 
     /**
-     * Fulfills ListMetatadataFormats requests using the repository provider module
-     * that was injected by the controller. Each repository provider defines its
-     * own metadata formats.
+     * Handles `ListMetatadataFormats` requests using the current repository module.
      * @param {MetadataFormatParameters} query
      * @returns {Promise<string>}
      */
@@ -238,8 +240,7 @@ export class CoreOaiProvider {
     }
 
     /**
-     * Fulfills GetRecord requests using the repository provider module
-     * that was injected by the controller.
+     * Handles `GetRecord` requests using the current repository module.
      * @param {RecordParamters} query
      * @returns {Promise<string>}
      */
@@ -287,8 +288,7 @@ export class CoreOaiProvider {
     }
 
     /**
-     * Fulfills ListIdentifiers requests using the repository provider module
-     * that was injected by the controller.
+     * Handles `ListIdentifiers` requests using the current repository module.
      * @param {ListParameters} query
      * @returns {Promise<string>}
      */
@@ -350,8 +350,7 @@ export class CoreOaiProvider {
 
 
     /**
-     * Fulfills ListRecords requests using the repository provider module
-     * that was injected by the controller.
+     * Handles `ListRecords` requests using the current repository module.
      * @param {ListParameters} query
      * @returns {Promise<any>}
      */
@@ -413,6 +412,11 @@ export class CoreOaiProvider {
         );
     }
 
+    /**
+     * Handles `Identify` requests using the current repository module.
+     * @param {any} query
+     * @returns {Promise<any>}
+     */
     identify(query: any): Promise<any> {
 
         logger.debug("Identify");
@@ -447,7 +451,11 @@ export class CoreOaiProvider {
         });
     }
 
-
+    /**
+     * Handles `ListSets` requests using the current repository module.
+     * @param {any} query
+     * @returns {Promise<any>}
+     */
     listSets(query: any): Promise<any> {
         /**
          * Parameters: resumptionToken (exclusive)

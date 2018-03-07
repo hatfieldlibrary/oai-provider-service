@@ -47,7 +47,7 @@ import logger from "../../../server/logger";
 import {SampleDaoConnector} from "../dao/sample-dao";
 
 /**
- * Factory function to create an oai provider
+ * Factory function to create the oai provider
  * @param {Object} [options={}] - Implementation-specific configuration
  * @returns {DataRepository}
  */

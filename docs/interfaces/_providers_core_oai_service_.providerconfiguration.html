@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>MetadataFormatParameters | OAI-PMH-Service</title>
+	<title>ProviderConfiguration | OAI-PMH-Service</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_providers_core_core_oai_provider_.html">&quot;providers/core/core-oai-provider&quot;</a>
+					<a href="../modules/_providers_core_oai_service_.html">&quot;providers/core/oai-service&quot;</a>
 				</li>
 				<li>
-					<a href="_providers_core_core_oai_provider_.metadataformatparameters.html">MetadataFormatParameters</a>
+					<a href="_providers_core_oai_service_.providerconfiguration.html">ProviderConfiguration</a>
 				</li>
 			</ul>
-			<h1>Interface MetadataFormatParameters</h1>
+			<h1>Interface ProviderConfiguration</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The optional parameter for OAI GetMetadataFormats requests.</p>
+						<p>The interface for the OAI provider description. All fields are
+							mandatory.  Define your configuration in separate repository
+						Configuration classes.</p>
 					</div>
 				</div>
 			</section>
@@ -80,8 +82,15 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">MetadataFormatParameters</span>
+						<span class="target">ProviderConfiguration</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implemented by</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../classes/_providers_tagger_provider_repository_configuration_.configuration.html" class="tsd-signature-type">Configuration</a></li>
+					<li><a href="../classes/_providers_sample_provider_repository_configuration_.configuration.html" class="tsd-signature-type">Configuration</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -91,7 +100,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_core_oai_provider_.metadataformatparameters.html#identifier" class="tsd-kind-icon">identifier</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#adminemail" class="tsd-kind-icon">admin<wbr>Email</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#baseurl" class="tsd-kind-icon">baseURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#deletedrecord" class="tsd-kind-icon">deleted<wbr>Record</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#earliestdatestamp" class="tsd-kind-icon">earliest<wbr>Datestamp</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#granularity" class="tsd-kind-icon">granularity</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#port" class="tsd-kind-icon">port</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#protocolversion" class="tsd-kind-icon">protocol<wbr>Version</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_providers_core_oai_service_.providerconfiguration.html#repositoryname" class="tsd-kind-icon">repository<wbr>Name</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,12 +117,92 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="identifier" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> identifier</h3>
-					<div class="tsd-signature tsd-kind-icon">identifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="adminemail" class="tsd-anchor"></a>
+					<h3>admin<wbr>Email</h3>
+					<div class="tsd-signature tsd-kind-icon">admin<wbr>Email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in providers/core/core-oai-provider.ts:161</li>
+							<li>Defined in providers/core/oai-service.ts:37</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="baseurl" class="tsd-anchor"></a>
+					<h3>baseURL</h3>
+					<div class="tsd-signature tsd-kind-icon">baseURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:35</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="deletedrecord" class="tsd-anchor"></a>
+					<h3>deleted<wbr>Record</h3>
+					<div class="tsd-signature tsd-kind-icon">deleted<wbr>Record<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:40</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="description" class="tsd-anchor"></a>
+					<h3>description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:39</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="earliestdatestamp" class="tsd-anchor"></a>
+					<h3>earliest<wbr>Datestamp</h3>
+					<div class="tsd-signature tsd-kind-icon">earliest<wbr>Datestamp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:42</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="granularity" class="tsd-anchor"></a>
+					<h3>granularity</h3>
+					<div class="tsd-signature tsd-kind-icon">granularity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:41</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="port" class="tsd-anchor"></a>
+					<h3>port</h3>
+					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:38</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="protocolversion" class="tsd-anchor"></a>
+					<h3>protocol<wbr>Version</h3>
+					<div class="tsd-signature tsd-kind-icon">protocol<wbr>Version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:36</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="repositoryname" class="tsd-anchor"></a>
+					<h3>repository<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">repository<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in providers/core/oai-service.ts:34</li>
 						</ul>
 					</aside>
 				</section>
@@ -126,7 +223,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_controllers_tagger_.html">"providers/controllers/tagger"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_core_core_oai_provider_.html">"providers/core/core-<wbr>oai-<wbr>provider"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -138,7 +235,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_core_oai_response_.html">"providers/core/oai-<wbr>response"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_providers_core_oai_service_.html">"providers/core/oai-<wbr>service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -190,57 +287,45 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_providers_core_core_oai_provider_.deleted_records_support.html" class="tsd-kind-icon">DELETED_<wbr>RECORDS_<wbr>SUPPORT</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_providers_core_core_oai_provider_.errors.html" class="tsd-kind-icon">ERRORS</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_providers_core_core_oai_provider_.exceptioncodes.html" class="tsd-kind-icon">Exception<wbr>Codes</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_providers_core_core_oai_provider_.harvesting_granularity.html" class="tsd-kind-icon">HARVESTING_<wbr>GRANULARITY</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_providers_core_core_oai_provider_.metadata_format_dc.html" class="tsd-kind-icon">METADATA_<wbr>FORMAT_<wbr>DC</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="../enums/_providers_core_core_oai_provider_.verbs.html" class="tsd-kind-icon">Verbs</a>
-					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_providers_core_core_oai_provider_.coreoaiprovider.html" class="tsd-kind-icon">Core<wbr>Oai<wbr>Provider</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_providers_core_core_oai_provider_.datarepository.html" class="tsd-kind-icon">Data<wbr>Repository</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_providers_core_core_oai_provider_.exceptionparams.html" class="tsd-kind-icon">Exception<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_providers_core_core_oai_provider_.formats.html" class="tsd-kind-icon">Formats</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_providers_core_core_oai_provider_.listparameters.html" class="tsd-kind-icon">List<wbr>Parameters</a>
+						<a href="../classes/_providers_core_oai_service_.oaiservice.html" class="tsd-kind-icon">Oai<wbr>Service</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_providers_core_core_oai_provider_.metadataformatparameters.html" class="tsd-kind-icon">Metadata<wbr>Format<wbr>Parameters</a>
+						<a href="_providers_core_oai_service_.providerconfiguration.html" class="tsd-kind-icon">Provider<wbr>Configuration</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_providers_core_core_oai_provider_.metadataformatparameters.html#identifier" class="tsd-kind-icon">identifier</a>
+								<a href="_providers_core_oai_service_.providerconfiguration.html#adminemail" class="tsd-kind-icon">admin<wbr>Email</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#baseurl" class="tsd-kind-icon">baseURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#deletedrecord" class="tsd-kind-icon">deleted<wbr>Record</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#earliestdatestamp" class="tsd-kind-icon">earliest<wbr>Datestamp</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#granularity" class="tsd-kind-icon">granularity</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#port" class="tsd-kind-icon">port</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#protocolversion" class="tsd-kind-icon">protocol<wbr>Version</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_providers_core_oai_service_.providerconfiguration.html#repositoryname" class="tsd-kind-icon">repository<wbr>Name</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_providers_core_core_oai_provider_.providerdcmapper.html" class="tsd-kind-icon">ProviderDCMapper</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_providers_core_core_oai_provider_.recordparamters.html" class="tsd-kind-icon">Record<wbr>Paramters</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

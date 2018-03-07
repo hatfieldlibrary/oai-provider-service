@@ -23,7 +23,7 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as xml from 'xml';
+import  xml = require('xml');
 import {ExceptionCodes, ExceptionParams} from "./core-oai-provider";
 import {Exceptions} from "./exceptions/exceptions";
 
@@ -67,7 +67,7 @@ function generateResponse(verb: string, url: string, responseContent: any): stri
  * @param {ExceptionCodes} code
  * @returns {string | NodeJS.ReadableStream}
  */
-const generateException = (exception: ExceptionParams, code: ExceptionCodes) => {
+function generateException(exception: ExceptionParams, code: ExceptionCodes) {
     /**
      * Validate the argument types.
      */

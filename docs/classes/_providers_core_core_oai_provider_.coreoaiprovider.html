@@ -72,9 +72,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The core OAI provider class requires an instance of the OAI
-							service (oai-service) that is configured with a data repository
-						(tagger-data-repository).</p>
+						<p>The core OAI provider class instantiates an <code>OaiService</code> that has been configured with
+						a single data repository module.</p>
 					</div>
 				</div>
 			</section>
@@ -133,22 +132,32 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Core<wbr>Oai<wbr>Provider<span class="tsd-signature-symbol">(</span>factory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, configuration<span class="tsd-signature-symbol">: </span><a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a>, mapper<span class="tsd-signature-symbol">: </span><a href="../interfaces/_providers_core_core_oai_provider_.providerdcmapper.html" class="tsd-signature-type">ProviderDCMapper</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_providers_core_core_oai_provider_.coreoaiprovider.html" class="tsd-signature-type">CoreOaiProvider</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Core<wbr>Oai<wbr>Provider<span class="tsd-signature-symbol">(</span>factory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, configuration<span class="tsd-signature-symbol">: </span><a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a>, mapper<span class="tsd-signature-symbol">: </span><a href="../interfaces/_providers_core_core_oai_provider_.providerdcmapper.html" class="tsd-signature-type">ProviderDCMapper</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_providers_core_core_oai_provider_.coreoaiprovider.html" class="tsd-signature-type">CoreOaiProvider</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:186</li>
+									<li>Defined in providers/core/core-oai-provider.ts:173</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The constructor initializes the core provider with a single provider module.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>factory: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the provider module&#39;s factory method</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>configuration: <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a></h5>
+									<h5>configuration: <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a></h5>
 								</li>
 								<li>
 									<h5>mapper: <a href="../interfaces/_providers_core_core_oai_provider_.providerdcmapper.html" class="tsd-signature-type">ProviderDCMapper</a></h5>
@@ -167,7 +176,7 @@
 					<div class="tsd-signature tsd-kind-icon">mapper<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_providers_core_core_oai_provider_.providerdcmapper.html" class="tsd-signature-type">ProviderDCMapper</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in providers/core/core-oai-provider.ts:185</li>
+							<li>Defined in providers/core/core-oai-provider.ts:172</li>
 						</ul>
 					</aside>
 				</section>
@@ -177,17 +186,17 @@
 					<div class="tsd-signature tsd-kind-icon">oai<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_providers_core_oai_service_.oaiservice.html" class="tsd-signature-type">OaiService</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in providers/core/core-oai-provider.ts:183</li>
+							<li>Defined in providers/core/core-oai-provider.ts:170</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="parameters" class="tsd-anchor"></a>
 					<h3>parameters</h3>
-					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a></div>
+					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_providers_core_oai_service_.providerconfiguration.html" class="tsd-signature-type">ProviderConfiguration</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in providers/core/core-oai-provider.ts:184</li>
+							<li>Defined in providers/core/core-oai-provider.ts:171</li>
 						</ul>
 					</aside>
 				</section>
@@ -197,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">possible<wbr>Params<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[&#x27;verb&#x27;, &#x27;from&#x27;, &#x27;until&#x27;, &#x27;metadataPrefix&#x27;, &#x27;set&#x27;, &#x27;resumptionToken&#x27;]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in providers/core/core-oai-provider.ts:186</li>
+							<li>Defined in providers/core/core-oai-provider.ts:173</li>
 						</ul>
 					</aside>
 				</section>
@@ -214,7 +223,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:502</li>
+									<li>Defined in providers/core/core-oai-provider.ts:494</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -242,13 +251,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:260</li>
+									<li>Defined in providers/core/core-oai-provider.ts:247</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fulfills GetRecord requests using the repository provider module
-									that was injected by the controller.</p>
+									<p>Handles <code>GetRecord</code> requests using the current repository module.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -271,7 +279,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:533</li>
+									<li>Defined in providers/core/core-oai-provider.ts:525</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -297,7 +305,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:538</li>
+									<li>Defined in providers/core/core-oai-provider.ts:530</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -323,7 +331,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:493</li>
+									<li>Defined in providers/core/core-oai-provider.ts:485</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -354,7 +362,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:525</li>
+									<li>Defined in providers/core/core-oai-provider.ts:517</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -371,7 +379,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:521</li>
+									<li>Defined in providers/core/core-oai-provider.ts:513</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -388,7 +396,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:511</li>
+									<li>Defined in providers/core/core-oai-provider.ts:503</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -416,9 +424,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:430</li>
+									<li>Defined in providers/core/core-oai-provider.ts:420</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handles <code>Identify</code> requests using the current repository module.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -439,7 +452,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:529</li>
+									<li>Defined in providers/core/core-oai-provider.ts:521</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -462,13 +475,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:309</li>
+									<li>Defined in providers/core/core-oai-provider.ts:295</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fulfills ListIdentifiers requests using the repository provider module
-									that was injected by the controller.</p>
+									<p>Handles <code>ListIdentifiers</code> requests using the current repository module.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -491,14 +503,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:213</li>
+									<li>Defined in providers/core/core-oai-provider.ts:201</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fulfills ListMetatadataFormats requests using the repository provider module
-										that was injected by the controller. Each repository provider defines its
-									own metadata formats.</p>
+									<p>Handles <code>ListMetatadataFormats</code> requests using the current repository module.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -521,13 +531,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:372</li>
+									<li>Defined in providers/core/core-oai-provider.ts:357</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fulfills ListRecords requests using the repository provider module
-									that was injected by the controller.</p>
+									<p>Handles <code>ListRecords</code> requests using the current repository module.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -550,9 +559,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in providers/core/core-oai-provider.ts:467</li>
+									<li>Defined in providers/core/core-oai-provider.ts:459</li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handles <code>ListSets</code> requests using the current repository module.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -571,8 +585,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Internals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_controllers_sample_.html">"providers/controllers/sample"</a>
@@ -625,11 +639,20 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_providers_tagger_provider_repository_tagger_dc_mapper_.html">"providers/tagger-<wbr>provider/repository/tagger-<wbr>dc-<wbr>mapper"</a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_env_.html">"server/env"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_host_config_.html">"server/host-<wbr>config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_server_logger_.html">"server/logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_routes_.html">"server/routes"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_server_server_.html">"server/server"</a>
 					</li>
 				</ul>
 			</nav>
@@ -733,9 +756,6 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_providers_core_core_oai_provider_.metadataformatparameters.html" class="tsd-kind-icon">Metadata<wbr>Format<wbr>Parameters</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_providers_core_core_oai_provider_.providerconfiguration.html" class="tsd-kind-icon">Provider<wbr>Configuration</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_providers_core_core_oai_provider_.providerdcmapper.html" class="tsd-kind-icon">ProviderDCMapper</a>

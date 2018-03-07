@@ -32,14 +32,14 @@ import {SampleDcMapper} from "../sample-provider/repository/sample-dc-mapper";
 
 
 /**
- * Set up the OAI provider to use the tagger repository implementation. Separate
- * controllers can instantiate providers with different repositories.
+ * This is a CoreOaiProvider instance configured for the sample repository module.
+ * Module configuration is provided via constructor parameters.
  * @type {CoreOaiProvider}
  */
 const provider = new CoreOaiProvider(factory, new Configuration(), new SampleDcMapper());
 
 /**
- * The OAI-PMH controller provides a single endpoint for OAI requests.
+ * This controller handles all OAI requests to the sample module.
  *
  * OAI exceptions that result from successful request processing are returned in
  * the Response with status code 200. The Promises will reject when unexpected

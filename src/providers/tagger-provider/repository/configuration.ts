@@ -25,6 +25,9 @@
 import {DELETED_RECORDS_SUPPORT, HARVESTING_GRANULARITY} from "../../core/core-oai-provider";
 import {ProviderConfiguration} from "../../core/oai-service";
 
+/**
+ * The Tagger provider module configuration.
+ */
 export class Configuration implements ProviderConfiguration {
 
     public repositoryName: string = "Academic Commons";

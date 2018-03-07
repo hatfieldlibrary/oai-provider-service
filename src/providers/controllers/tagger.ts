@@ -32,13 +32,14 @@ import {TaggerDcMapper} from "../tagger-provider/repository/tagger-dc-mapper";
 
 
 /**
- * Core OAI provider instance that has been configured to use the Tagger repository.
+ * This is a CoreOaiProvider instance configured for the Tagger repository module.
+ * Module configuration is provided via constructor parameters.
  * @type {CoreOaiProvider}
  */
 const provider = new CoreOaiProvider(factory, new Configuration(), new TaggerDcMapper());
 
 /**
- * The OAI-PMH controller provides a single endpoint for OAI requests.
+ * This controller handles all OAI requests to the Tagger module.
  *
  * OAI exceptions that result from successful request processing are returned in
  * the Response with status code 200. The Promises will reject when unexpected

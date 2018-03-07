@@ -22,11 +22,11 @@
  *  along with OAI-PHM Service.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as express from 'express';
+import express = require('express');
 import { Application } from 'express';
-import * as bodyParser from 'body-parser';
-import * as http from 'http';
-import * as os from 'os';
+import bodyParser = require('body-parser');
+import http = require('http');
+import os = require('os');
 import logger from './logger';
 import config from "./host-config";
 
