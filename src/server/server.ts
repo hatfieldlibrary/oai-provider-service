@@ -23,7 +23,7 @@
  */
 
 import express = require('express');
-import { Application } from 'express';
+import {Application} from 'express';
 import bodyParser = require('body-parser');
 import http = require('http');
 import os = require('os');
@@ -35,28 +35,43 @@ const app = express();
 
 export default class ExpressServer {
 
-  port: number = 0;
+    port: number;
 
-  constructor() {
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
+    constructor() {
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended: true}));
+        this.port = this.getPort();
+    }
 
-    this.port = config.port;
-
-  }
-
-  router(routes: (app: Application) => void): ExpressServer {
-    routes(app);
-    return this;
-  }
+    router(routes: (app: Application) => void): ExpressServer {
+        routes(app);
+        return this;
+    }
 
 
-  listen(port: number): Application {
-    const welcome = (port: number) => () => logger.info(`up and running in ${process.env.NODE_ENV || 
-      'development'} @: ${os.hostname() } on port: ${port}}`);
-    http.createServer(app).listen(port, welcome(port));
-    return app;
-  }
+    listen(): Application {
+        const port = this.getPort();
+        const welcome: any = () => {
+            logger.info(`Up and running in ${process.env.NODE_ENV || 
+            'development'} @: ${os.hostname() } on port: ${this.port}}`);
+        };
+        http.createServer(app).listen(port, welcome());
+        return app;
+    }
+
+    /**
+     * Returns default port if host configuration is not available.
+     * @returns {number}
+     */
+    private getPort(): number {
+        // Provide default port if configuration not available;
+        if (config.port === undefined) {
+            logger.warn("No configuration provided. Using default port. See documentation for details.");
+            return 3000;
+        }
+        return config.port;
+
+    }
 
 
 }
