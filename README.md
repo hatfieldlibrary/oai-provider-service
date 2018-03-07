@@ -55,7 +55,7 @@ again you might consider an external configuration file for convenience and secu
 for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
 
 
-## Development
+## Make Your Own
 
 If you want to work on a new OAI provider, a good starting point would be to copy and rename the `./providers/sample-provider` 
  directory. 
