@@ -50,12 +50,12 @@ using these links. For suggestions on how to configure the default port, see the
 
 ### Development
 
-If you want to work on a new OAI provider, a good starting point would be to copy and rename the `sample-provider` 
- directory. To configure access to your new repository module, copy and rename `./controllers/sample` and 
- then instantiate it's `provider` with the factory, provider configuration, and metadata mapper from your new repository directory. 
- Finally, add your new controller to Express routes (`/server/routes.ts`).
+If you want to work on a new OAI provider, a good starting point would be to copy and rename the `./providers/sample-provider` 
+ directory. Next, copy and rename `./controllers/sample` and  instantiate it's `provider` with the factory, provider configuration, 
+ and metadata mapper found in your new repository directory. (Be sure to inspect the import statements in your controller class
+ to verify you are importing the correct files.)  Finally, add your new controller to Express routes (`/server/routes.ts`).
 
-With this boilerplate out of the way, you should be able to connect to your new repository.
+With this boilerplate out of the way, you should be able to restart and connect to your new repository.
 
 You are on your own from this point, but these are a few things you should know.
 
