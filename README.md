@@ -5,8 +5,8 @@ OAI-PMH Service is a Nodejs Express application can support multiple, configurab
 OAI-PMH Service borrows from the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
 The National Library of Finland. 
 
-This project includes a data provider configuration for one of our local services `(tagger-provider)`. The project
- includes a second, very simple provider with dummy data `(sample-provider)`.  
+This project includes a data repository module for one of our local services `(tagger-provider)`. The project
+ includes a second, very simple module with dummy data `(sample-provider)`.  
 
 ## Dependenices
 
@@ -16,11 +16,11 @@ This project includes a data provider configuration for one of our local service
 
 ## Capabilities
 
-The `tagger-provider` repository implements a data access object (DAO) with mysql support for querying the 
+The `tagger-provider` repository module implements a data access object (DAO) with mysql support for querying the 
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) database.  The provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  ListSets is not supported.  
 
-The `sample-provider` implements a DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
+The `sample-provider` module implements a DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
  are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the
  OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another, 
  new OAI-PHM provider with real data.

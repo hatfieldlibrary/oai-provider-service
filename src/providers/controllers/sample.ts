@@ -23,7 +23,7 @@
  */
 
 import {Request, Response} from "express";
-import {CoreOaiProvider, ExceptionCodes, ExceptionParams} from "../core/core-oai-provider";
+import {CoreOaiProvider, EXCEPTION_CODES, ExceptionParams} from "../core/core-oai-provider";
 import {generateException} from "../core/oai-response";
 import logger from "../../server/logger";
 import {factory} from "../sample-provider/repository/sample-data-repository";
@@ -136,7 +136,7 @@ export let oai = (req: Request, res: Response) => {
             const exception: ExceptionParams = {
                 baseUrl: req.protocol + '://' + req.get('host') +  req.path
             };
-            res.send(generateException(exception, ExceptionCodes.BAD_VERB));
+            res.send(generateException(exception, EXCEPTION_CODES.BAD_VERB));
     }
 
 };

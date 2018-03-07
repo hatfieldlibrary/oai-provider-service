@@ -23,7 +23,7 @@
  */
 
 import {ExceptionMessages} from "./exception-messages";
-import {ExceptionCodes} from "../core-oai-provider";
+import {EXCEPTION_CODES} from "../core-oai-provider";
 
 
 export class Exceptions  {
@@ -32,33 +32,33 @@ export class Exceptions  {
 
     /**
      * Maps OAI error codes to the corresponding error message.
-     * @param {ExceptionCodes} code
+     * @param {EXCEPTION_CODES} code
      * @returns {string}
      */
-    public static getExceptionMessage(code: ExceptionCodes) : string {
+    public static getExceptionMessage(code: EXCEPTION_CODES) : string {
         switch(code) {
-            case ExceptionCodes.BAD_ARGUMENT: {
+            case EXCEPTION_CODES.BAD_ARGUMENT: {
                return ExceptionMessages.BAD_ARGUMENT;
             }
-            case ExceptionCodes.BAD_RESUMPTION_TOKEN: {
+            case EXCEPTION_CODES.BAD_RESUMPTION_TOKEN: {
                 return ExceptionMessages.BAD_RESUMPTION_TOKEN;
             }
-            case ExceptionCodes.BAD_VERB: {
+            case EXCEPTION_CODES.BAD_VERB: {
                 return ExceptionMessages.BAD_VERB;
             }
-            case ExceptionCodes.CANNOT_DISSEMINATE_FORMAT: {
+            case EXCEPTION_CODES.CANNOT_DISSEMINATE_FORMAT: {
                 return ExceptionMessages.CANNOT_DISSEMINATE_FORMAT;
             }
-            case ExceptionCodes.ID_DOES_NOT_EXIST: {
+            case EXCEPTION_CODES.ID_DOES_NOT_EXIST: {
                 return ExceptionMessages.ID_DOES_NOT_EXIST;
             }
-            case ExceptionCodes.NO_RECORDS_MATCH: {
+            case EXCEPTION_CODES.NO_RECORDS_MATCH: {
                 return ExceptionMessages.NO_RECORDS_MATCH;
             }
-            case ExceptionCodes.NO_METADATA_FORMATS: {
+            case EXCEPTION_CODES.NO_METADATA_FORMATS: {
                 return ExceptionMessages.NO_METADATA_FORMATS;
             }
-            case ExceptionCodes.NO_SET_HIERARCHY: {
+            case EXCEPTION_CODES.NO_SET_HIERARCHY: {
                 return ExceptionMessages.NO_SET_HEIRARCHY;
             }
             default: {

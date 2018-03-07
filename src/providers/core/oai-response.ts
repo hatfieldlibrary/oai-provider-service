@@ -24,7 +24,7 @@
  */
 
 import  xml = require('xml');
-import {ExceptionCodes, ExceptionParams} from "./core-oai-provider";
+import {EXCEPTION_CODES, ExceptionParams} from "./core-oai-provider";
 import {Exceptions} from "./exceptions/exceptions";
 
 /**
@@ -64,10 +64,10 @@ function generateResponse(verb: string, url: string, responseContent: any): stri
 /**
  * Generates an OAI exception in xml.
  * @param {ExceptionParams} exception
- * @param {ExceptionCodes} code
+ * @param {EXCEPTION_CODES} code
  * @returns {string | NodeJS.ReadableStream}
  */
-function generateException(exception: ExceptionParams, code: ExceptionCodes) {
+function generateException(exception: ExceptionParams, code: EXCEPTION_CODES) {
     /**
      * Validate the argument types.
      */

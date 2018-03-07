@@ -91,7 +91,7 @@ export interface ProviderDCMapper {
  */
 export interface ExceptionParams {
     baseUrl: string;
-    verb?: Verbs;
+    verb?: VERBS;
     identifier?: string;
     metadataPrefix?: string
 }
@@ -99,7 +99,7 @@ export interface ExceptionParams {
 /**
  * OAI verbs.
  */
-export enum Verbs {
+export enum VERBS {
     IDENTIFY = 'Identify',
     LIST_METADATA_FORMATS = 'ListMetadataFormats',
     LIST_SETS = 'ListSets',
@@ -111,7 +111,7 @@ export enum Verbs {
 /**
  * The OAI codes returned in exceptions.
  */
-export enum ExceptionCodes {
+export enum EXCEPTION_CODES {
     BAD_ARGUMENT = "badArgument",
     BAD_RESUMPTION_TOKEN = "badResumptionToken",
     BAD_VERB = "badVerb",
@@ -123,7 +123,7 @@ export enum ExceptionCodes {
 }
 
 /**
- * The interface used by OAI repository modules.
+ * Implemented by OAI repository modules.
  */
 export interface DataRepository {
     setSupport: boolean,
@@ -206,12 +206,12 @@ export class CoreOaiProvider {
             const queryParameters = this.getQueryParameters(query);
             const exception: ExceptionParams = {
                 baseUrl: this.parameters.baseURL,
-                verb: Verbs.LIST_METADATA_FORMATS,
+                verb: VERBS.LIST_METADATA_FORMATS,
                 metadataPrefix: METADATA_FORMAT_DC.prefix
             };
             if (queryParameters.length > 2 || (queryParameters.length === 2 &&
                     !this.hasKey(query, 'identifier'))) {
-                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
             } else {
                 const args = this.hasKey(query, 'identifier') ? query.identifier : undefined;
                 this.oaiService.getProvider().getMetadataFormats(args).then((formats: any[]) => {
@@ -232,7 +232,7 @@ export class CoreOaiProvider {
 
                     } catch (err) {
                         logger.error(err);
-                        reject(generateException(exception, ExceptionCodes.NO_METADATA_FORMATS));
+                        reject(generateException(exception, EXCEPTION_CODES.NO_METADATA_FORMATS));
                     }
                 });
             }
@@ -252,14 +252,14 @@ export class CoreOaiProvider {
             const queryParameters = this.getQueryParameters(query);
             const exception: ExceptionParams = {
                 baseUrl: this.parameters.baseURL,
-                verb: Verbs.GET_RECORD,
+                verb: VERBS.GET_RECORD,
                 identifier: query.identifier,
                 metadataPrefix: METADATA_FORMAT_DC.prefix
             };
             if (queryParameters.length !== 3 ||
                 !this.hasKey(query, 'identifier') ||
                 !this.hasKey(query, 'metadataPrefix')) {
-                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
 
             } else {
 
@@ -271,17 +271,17 @@ export class CoreOaiProvider {
                                 resolve(generateResponse(<any>query, this.parameters.baseURL, mapped))
                             } else {
                                 // There should be one matching record.
-                                resolve(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
+                                resolve(generateException(exception, EXCEPTION_CODES.ID_DOES_NOT_EXIST));
                             }
                         } catch (err) {
                             logger.error(err);
-                            reject(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
+                            reject(generateException(exception, EXCEPTION_CODES.ID_DOES_NOT_EXIST));
                         }
                     })
                     .catch((err: Error) => {
                         logger.error(err);
                         // If dao query errs, return OAI error.
-                        reject(generateException(exception, ExceptionCodes.ID_DOES_NOT_EXIST));
+                        reject(generateException(exception, EXCEPTION_CODES.ID_DOES_NOT_EXIST));
                     });
             }
         });
@@ -301,31 +301,31 @@ export class CoreOaiProvider {
             const queryParameters = this.getQueryParameters(query);
             const exception: ExceptionParams = {
                 baseUrl: this.parameters.baseURL,
-                verb: Verbs.LIST_IDENTIFIERS,
+                verb: VERBS.LIST_IDENTIFIERS,
                 metadataPrefix: METADATA_FORMAT_DC.prefix
             };
 
             // Valid parameter count.
             if ((queryParameters.length > 6 || queryParameters.length < 2)) {
-                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
 
             }
             // Verify that query parameters are valid for this repository.
             if (this.hasInvalidListParameter(queryParameters, query)) {
-                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
             }
 
             // If set is requested, verify that it is supported by this repository.
             if (this.hasKey(query, 'set')) {
                 if (!this.hasSetSupport()) {
-                    resolve(generateException(exception, ExceptionCodes.NO_SET_HIERARCHY));
+                    resolve(generateException(exception, EXCEPTION_CODES.NO_SET_HIERARCHY));
                 }
             }
             // Execute the request.
             this.oaiService.getProvider().getIdentifiers(query)
                 .then((result: any) => {
                     if (result.length === 0) {
-                        resolve(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                        resolve(generateException(exception, EXCEPTION_CODES.NO_RECORDS_MATCH));
                     }
                     try {
                         const mapped = this.mapper.mapOaiDcListIdentifiers(result);
@@ -334,14 +334,14 @@ export class CoreOaiProvider {
                     } catch (err) {
                         // Log the error and return OAI error message.
                         logger.error(err);
-                        reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                        reject(generateException(exception, EXCEPTION_CODES.NO_RECORDS_MATCH));
                     }
 
                 })
                 .catch((err: Error) => {
                     logger.error(err);
                     // If dao query fails, return OAI error.
-                    reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                    reject(generateException(exception, EXCEPTION_CODES.NO_RECORDS_MATCH));
                 });
 
 
@@ -362,31 +362,31 @@ export class CoreOaiProvider {
                 const queryParameters = this.getQueryParameters(query);
                 const exception: ExceptionParams = {
                     baseUrl: this.parameters.baseURL,
-                    verb: Verbs.LIST_RECORDS,
+                    verb: VERBS.LIST_RECORDS,
                     metadataPrefix: METADATA_FORMAT_DC.prefix
                 };
 
                 // Valid parameter count.
                 if ((queryParameters.length > 6 || queryParameters.length < 2)) {
-                    resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                    resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
 
                 }
                 // Verify that query parameters are valid for this repository.
                 if (this.hasInvalidListParameter(queryParameters, query)) {
-                    resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                    resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
                 }
 
                 // If set is requested, verify that it is supported by this repository.
                 if (this.hasKey(query, 'set')) {
                     if (!this.hasSetSupport()) {
-                        resolve(generateException(exception, ExceptionCodes.NO_SET_HIERARCHY));
+                        resolve(generateException(exception, EXCEPTION_CODES.NO_SET_HIERARCHY));
                     }
                 }
                 // Execute the request.
                 this.oaiService.getProvider().getRecords(query)
                     .then((result: any) => {
                         if (result.length === 0) {
-                            resolve(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                            resolve(generateException(exception, EXCEPTION_CODES.NO_RECORDS_MATCH));
 
                         }
                         try {
@@ -396,7 +396,7 @@ export class CoreOaiProvider {
                         } catch (err) {
                             // Log the error and return OAI error message.
                             logger.error(err);
-                            reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                            reject(generateException(exception, EXCEPTION_CODES.NO_RECORDS_MATCH));
 
                         }
 
@@ -404,7 +404,7 @@ export class CoreOaiProvider {
                     .catch((err: Error) => {
                         logger.error(err);
                         // If dao query fails, return OAI error.
-                        reject(generateException(exception, ExceptionCodes.NO_RECORDS_MATCH));
+                        reject(generateException(exception, EXCEPTION_CODES.NO_RECORDS_MATCH));
 
                     });
 
@@ -425,11 +425,11 @@ export class CoreOaiProvider {
             const queryParameters = this.getQueryParameters(query);
             const exception: ExceptionParams = {
                 baseUrl: this.parameters.baseURL,
-                verb: Verbs.IDENTIFY
+                verb: VERBS.IDENTIFY
             };
             try {
                 if (queryParameters.length > 1) {
-                    resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                    resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
                 } else {
                     const responseContent = {
                         Identify: [
@@ -446,7 +446,7 @@ export class CoreOaiProvider {
                 }
             } catch (err) {
                 logger.log(err);
-                reject(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                reject(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
             }
         });
     }
@@ -465,13 +465,13 @@ export class CoreOaiProvider {
             const queryParameters = this.getQueryParameters(query);
             const exception: ExceptionParams = {
                 baseUrl: this.parameters.baseURL,
-                verb: Verbs.LIST_SETS
+                verb: VERBS.LIST_SETS
             };
             if (queryParameters.length > 2 || (queryParameters.length === 2 &&
                     !this.hasKey(query, 'resumptionToken'))) {
-                resolve(generateException(exception, ExceptionCodes.BAD_ARGUMENT));
+                resolve(generateException(exception, EXCEPTION_CODES.BAD_ARGUMENT));
             } else {
-                resolve(generateException(exception, ExceptionCodes.NO_SET_HIERARCHY));
+                resolve(generateException(exception, EXCEPTION_CODES.NO_SET_HIERARCHY));
             }
         });
     }
