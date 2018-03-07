@@ -78,7 +78,7 @@ again you might consider an external configuration file for convenience and secu
 for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
 
 
-### Run in *production* mode:
+## Run in *production* mode:
 
 At the simplest level:
 ```
