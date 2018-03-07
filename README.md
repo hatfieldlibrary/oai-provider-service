@@ -63,7 +63,7 @@ With this boilerplate out of the way, you should be able to restart and connect 
 
 You are on your own from this point, but these are a few things you should know.
 
-*  You will need to define the OAI services you can provide from your data source and make necessary adjustments to the repository
+*  You will need to define the OAI services you can provide from your data source and make necessary adjustments to your repository
 classes and `Configuration`.
 * You will need to connect to your data source. Create a dao module for this.
 * Your dao will likely need it's own configuration information (e.g.: for a database connection).
@@ -89,7 +89,8 @@ npm start
 The gulp tasks compile Typescript and copy files to `dist`. 
 
 The project can be deployed to a production server and started with `node index` from within `dist`. Runtime configurations
-can be adjusted using `.env`. We typically run as daemon with `forever` or anther tool to assure the script runs continuously.  
+can be adjusted using `.env`. We typically run as daemon with [forever](https://github.com/foreverjs/forever) or another tool 
+to assure the script runs continuously.  
 
 ### Docker Container
 
