@@ -40,7 +40,7 @@ npm run dev
 ### Routes:
 
 The Express server will start on default port 3000.  You should be able to access the sample repository 
-using these links. If you wish, you can specify the port in configuration. See the following section on development.
+using these links. For suggestions on how to configure the default port, see the following section on development.
 
 * [`http://localhost:3000/sample/oai?verb=Identify`](http://localhost:3000/sample/oai?verb=Identify)
 * [`http://localhost:3000/sample/oai?verb=ListMetadataFormats`](http://localhost:3000/sample/oai?verb=ListMetadataFormats)
@@ -50,17 +50,19 @@ using these links. If you wish, you can specify the port in configuration. See t
 
 ### Development
 
-If you want to work on a new OAI provider, a good starting point might be to copy and rename the `sample-provider` 
- directory. Configuring the server to use your new repository module is as simple as creating a new controller
-module by copying the `sample` controller and  instantiating it's `provider` with the factory, provider configuration, 
-and metadata mapper from your new repository directory. Finally, add your new controller the the Express routes (`/server/routes.ts`).
+If you want to work on a new OAI provider, a good starting point would be to copy and rename the `sample-provider` 
+ directory. To configure access to your new repository module, copy and rename `./controllers/sample` and 
+ then instantiate it's `provider` with the factory, provider configuration, and metadata mapper from your new repository directory. 
+ Finally, add your new controller to Express routes (`/server/routes.ts`).
 
 With this boilerplate out of the way, you should be able to connect to your new repository.
 
 You are on your own from this point, but these are a few things you should know.
 
+*  You will need to define the OAI services you can provide from your data source and make necessary adjustments to the repository
+classes and `Configuration`.
 * You will need to connect to your data source. Create a dao module for this.
-* Your dao may need configuration information (e.g.: for a database connection).
+* Your dao will likely need it's own configuration information (e.g.: for a database connection).
 * You probably don't want to hard-code database credentials, etc., into your app, so consider using an external configuration file. 
 See `./providers/taggger-provider/credentials.ts`.
 * You can specify the location of your external credential files using `.env`. Note that there are two `.env` files: 
@@ -68,7 +70,7 @@ one in the root directory for development, and a second in `./production`. The s
 application.  See next section.
 
 Finally, you may need additional Express server configuration (e.g.: port number).  You can do this in code, but once 
-again you might want to consider an external configuration file for convenience and security. See `./server/host-config.ts`
+again you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
 for a peak at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
 
 
