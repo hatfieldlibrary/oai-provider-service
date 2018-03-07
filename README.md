@@ -5,7 +5,7 @@ OAI-PMH Service is a Nodejs Express application can support multiple, configurab
 OAI-PMH Service borrows from the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
 The National Library of Finland. 
 
-This project includes a data repository module for one of our local services `(tagger-provider)`. The project
+This project includes a provider module for one of our local services `(tagger-provider)`. The project
  includes a second, very simple module with dummy data `(sample-provider)`.  
 
 ## Dependenices
