@@ -1,6 +1,6 @@
 # OAI-PMH Service
 
-OAI-PMH Service is a Nodejs Express application can support multiple, configurable OAI-PMH version 2.0 data providers.
+OAI-PMH Service is a Nodejs Express application that supports multiple, configurable OAI-PMH version 2.0 data providers.
 
 OAI-PMH Service borrows from the [Modular OAI-PMH Server](https://github.com/NatLibFi/oai-pmh-server), University of Helsinki, 
 The National Library of Finland. 
@@ -16,8 +16,8 @@ This project includes a provider module for one of our local services `(tagger-p
 
 ## Capabilities
 
-The `tagger-provider` repository module implements a data access object (DAO) with mysql support for querying the 
-[Tagger-2](https://github.com/hatfieldlibrary/tagger-2) database.  The provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
+The `tagger-provider` repository module implements a data access object (DAO) with support for querying the 
+[Tagger-2](https://github.com/hatfieldlibrary/tagger-2) MySQL database.  The Tagger-2 provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  ListSets is not supported.  
 
 The `sample-provider` module implements a DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
@@ -50,8 +50,7 @@ using these links.
 
 #### Server Configuration
 
-You may require additional Express server configuration (e.g.: port number).  You can make changes in code, but once 
-again you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
+You may require additional Express server configuration (e.g.: port number).  You can make changes in code, but you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
 for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
 
 
