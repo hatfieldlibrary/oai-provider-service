@@ -89,7 +89,7 @@ The gulp tasks compile Typescript and copy files to `dist`.
 
 The project can be deployed to a production server and started with `node index` from within `dist`. Runtime configurations
 can be adjusted using `.env` and (recommended) external configuration files created for your environment. We typically run as server daemon using [forever](https://github.com/foreverjs/forever), or some tool 
-to assure that the script runs continuously.  
+to assure that the server runs continuously.  
 
 ### Docker Container
 
