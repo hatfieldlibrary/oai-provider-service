@@ -57,7 +57,7 @@ for a peek at how we do it. The location of your host configuration file can als
 If you want to work on a new OAI provider, a good starting point would be to copy and rename the `./providers/sample-provider` 
  directory. 
  
- Next, copy and rename `./controllers/sample` and  instantiate it's `provider` constant with the factory, provider configuration, 
+ Next, copy and rename `./controllers/sample` and  instantiate it's `provider` with the factory, provider configuration, 
  and metadata mapper found in your new repository directory. (Be sure to inspect the import statements in your controller class
  to verify you are importing the correct files.)  
  
