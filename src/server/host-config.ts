@@ -25,10 +25,35 @@
 import * as fs from "fs";
 import logger from "./logger";
 
+
 const hostFile = process.env.HOST_CONFIGURATION;
 
-logger.debug(hostFile);
+function hasHostConfigurationFile(): boolean {
 
-const config = JSON.parse(fs.readFileSync(hostFile, 'utf8'));
 
-export default config;
+    if (!hostFile) {
+        logger.warn("Host configuration file has not been registered.  See .env");
+        return false;
+    }
+    try {
+        fs.statSync(hostFile);
+        return true;
+    } catch (err) {
+        logger.warn("Could not find the host configuration file.");
+        return false;
+    }
+
+}
+
+function getHostConfiguration(): any {
+
+    try {
+        return JSON.parse(fs.readFileSync(hostFile, 'utf8'));
+
+    } catch (error) {
+        logger.warn("Could not parse the host configuration file.")
+    }
+
+}
+
+export {hasHostConfigurationFile, getHostConfiguration}

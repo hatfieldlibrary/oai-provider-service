@@ -56,7 +56,7 @@ export function factory(options = {}): DataRepository {
 
     const mysql: MysqlConnector = MysqlConnector.getInstance();
 
-    logger.debug('Creating the Tagger repository.');
+    logger.debug('Adding the Tagger provider.');
 
     return Object.freeze({
 

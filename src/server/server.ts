@@ -28,19 +28,16 @@ import bodyParser = require('body-parser');
 import http = require('http');
 import os = require('os');
 import logger from './logger';
-import config from "./host-config";
+import {getHostConfiguration, hasHostConfigurationFile} from "./host-config";
 
 const app = express();
 
 
 export default class ExpressServer {
 
-    port: number;
-
     constructor() {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
-        this.port = this.getPort();
     }
 
     router(routes: (app: Application) => void): ExpressServer {
@@ -49,11 +46,15 @@ export default class ExpressServer {
     }
 
     listen(): Application {
-        const port = this.getPort();
+
+        const config = this.getConfiguration();
+        const port = this.getPort(config);
+
         const welcome: any = () => {
             logger.info(`Up and running in ${process.env.NODE_ENV || 
-            'development'} @: ${os.hostname() } on port: ${this.port}}`);
+            'development'} @: ${os.hostname() } on port: ${port}}`);
         };
+
         http.createServer(app).listen(port, welcome());
         return app;
     }
@@ -62,14 +63,29 @@ export default class ExpressServer {
      * Returns default port if host configuration is not available.
      * @returns {number}
      */
-    private getPort(): number {
-        // Provide default port if configuration not available;
-        if (config.port === undefined) {
-            logger.warn("No configuration provided. Using default port. See documentation for details.");
-            return 3000;
-        }
-        return config.port;
+    private getConfiguration(): object {
 
+        if (hasHostConfigurationFile()) {
+            return getHostConfiguration();
+        } else {
+            logger.warn("No configuration provided. Using default port. See documentation for details.");
+            return {port: 3000};
+        }
+
+    }
+
+    /**
+     * Return configuration port or default port.
+     * @param configuration
+     * @returns {number}
+     */
+    private getPort(configuration: any): number {
+        if (configuration) {
+            if (configuration.port) {
+                return configuration.port;
+            }
+        }
+        return 3000;
     }
 
 

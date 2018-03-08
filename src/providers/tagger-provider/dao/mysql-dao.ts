@@ -61,7 +61,8 @@ export class MysqlConnector {
             });
 
         } else {
-            logger.warn('The Tagger database connection could not be established.');
+            logger.error('The Tagger database connection could not be established. (If you do not need Tagger ' +
+                'you can disable the route.)');
         }
 
     }
