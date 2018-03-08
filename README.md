@@ -20,9 +20,7 @@ The `tagger-provider` repository module implements a data access object (DAO) wi
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) MySQL database.  The Tagger-2 provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  `ListSets` is not supported.  
 
-The `sample-provider` module implements a DAO that returns dummy data. Sample repository modules use this data to provide mock OAI-PMH services that
- are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the
- OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another, 
+The `sample-provider` module implements a DAO that returns dummy data. The `sample-provider` repository modules use the DAO to implement mock OAI-PMH services that are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another, 
  new OAI-PHM provider with real data.
 
 ## Install It
