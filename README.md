@@ -54,10 +54,10 @@ for a peek at how we do it. The location of your host configuration file can als
 
 ## Make Your Own
 
-If you want to work on a new OAI provider, a good starting point would be to copy and rename the `./providers/sample-provider` 
+If you want to work on a new OAI provider, a good starting point would be to copy and rename the `.src/providers/sample-provider` 
  directory. 
  
- Next, copy and rename `./controllers/sample` and  instantiate it's `provider` with the factory, provider configuration, 
+ Next, copy and rename `.src/controllers/sample` and  instantiate it's `provider` with the factory, provider configuration, 
  and metadata mapper found in your new repository directory. (Be sure to inspect the import statements in your controller class
  to verify you are importing the correct files.)  
  
@@ -72,7 +72,7 @@ classes and `Configuration`.
 * You will need to connect to your data source. Create a dao module for this.
 * Your dao will likely need it's own configuration information (e.g.: for a database connection).
 * You probably don't want to hard-code database credentials, etc., into your app, so consider using an external configuration file. 
-See `./providers/taggger-provider/credentials.ts`.
+See `.src/providers/taggger-provider/credentials.ts`.
 * You can specify the location of your external credential files using `.env`. Note that there are two `.env` files: 
 one in the root directory for development, and a second in `./production`. The second file will be used for the compiled
 application.  See next section.
