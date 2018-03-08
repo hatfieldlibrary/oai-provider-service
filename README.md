@@ -20,7 +20,7 @@ The `tagger-provider` repository module implements a data access object (DAO) wi
 [Tagger-2](https://github.com/hatfieldlibrary/tagger-2) MySQL database.  The Tagger-2 provider supports `Identify`, `ListMetadataFormats`, `GetRecord`, `ListIdentifiers` and `ListRecords`. The optional
 `from` and `until` arguments are supported for selective harvesting with `YYYY-MM-DDThh:mm:ssZ` granularity.  `ListSets` is not supported.  
 
-The `sample-provider` module implements a DAO that returns dummy data. The `sample-provider` repository modules use the DAO to implement mock OAI-PMH services that are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another, 
+The `sample-provider` module implements a DAO that returns dummy data. The `sample-provider` repository modules use this DAO to implement mock OAI-PMH services that are similar to`tagger-provider` -- minus the option of selective harvesting.  The main purpose of `sample-provider` is to verify that the OAI-PMH Service can offer multiple providers via different Express routes.  The sample repository can also be used as the template for implementing a another, 
  new OAI-PHM provider with real data.
 
 ## Install It
@@ -49,7 +49,7 @@ using these links.
 #### Server Configuration
 
 You may require additional Express server configuration (e.g.: port number).  You can make changes in code, but you might consider an external configuration file for convenience and security. See `./server/host-config.ts`
-for a peek at how we do it. The location of your host configuration file can also be set in `.env` for both development and production.
+for a peek at how we do it. The location of your host configuration file can be set in `.env` files for both development and production.
 
 
 ## Make Your Own
@@ -65,7 +65,7 @@ If you want to work on a new OAI provider, a good starting point would be to cop
 
 With this boilerplate out of the way, you should be able to restart and connect to your new repository.
 
-You are on your own from this point, but these are a few things you should know.
+You are on your own from this point, but here are a few things you should know.
 
 *  You will need to define the OAI services you can provide from your data source and make necessary adjustments to your repository
 classes and `Configuration`.
