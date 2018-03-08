@@ -48,7 +48,6 @@ export default class ExpressServer {
         return this;
     }
 
-
     listen(): Application {
         const port = this.getPort();
         const welcome: any = () => {

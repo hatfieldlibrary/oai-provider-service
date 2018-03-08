@@ -25,12 +25,12 @@
 import * as mysql from 'mysql';
 import {Pool} from "mysql";
 import logger from '../../../server/logger';
-import credentials from "../credentials";
+import {getCredentials, hasCredentialsFile} from "../../core/credentials";
 
 /**
  * This is the DAO service for Tagger. It uses a mysql connection
- * pool to retrieve data.  The database connection parameters are
- * provided by server configuration.
+ * pool to retrieve data.  Database connection parameters are
+ * provided by the credentials file (path defined in .env).
  */
 export class MysqlConnector {
 
@@ -41,17 +41,29 @@ export class MysqlConnector {
 
         logger.debug('Setting up the Tagger mysql connection pool.');
 
-        logger.debug("host: " + credentials.host);
-        logger.debug("user: " + credentials.user);
-        logger.debug("password: " + credentials.password);
-        logger.debug("database: " + credentials.database);
+        // Get path from the environment.
+        const credFile = process.env.TAGGER_CONFIGURATION;
 
-        this.pool = mysql.createPool({
-            host: credentials.host,
-            user: credentials.user,
-            password: credentials.password,
-            database: credentials.database
-        });
+        if (hasCredentialsFile(credFile)) {
+
+            const creds = getCredentials(credFile);
+
+            logger.debug("host: " + creds.host);
+            logger.debug("user: " + creds.user);
+            logger.debug("password: " + creds.password);
+            logger.debug("database: " + creds.database);
+
+            this.pool = mysql.createPool({
+                host: creds.host,
+                user: creds.user,
+                password: creds.password,
+                database: creds.database
+            });
+
+        } else {
+            logger.warn('The Tagger database connection could not be established.');
+        }
+
     }
 
     public static getInstance(): MysqlConnector {

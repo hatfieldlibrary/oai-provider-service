@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2018 Willamette University
  *
@@ -123,6 +122,6 @@ function generateException(exception: ExceptionParams, code: EXCEPTION_CODES) {
     newException['OAI-PMH'].push({error: [{_attr: {code}}, Exceptions.getExceptionMessage(code)]});
 
     return xml(newException, {declaration: true});
-};
+}
 
 export {generateException, generateResponse};
