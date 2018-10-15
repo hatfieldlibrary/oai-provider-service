@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "A standalone OAI-PMH provider for Nodejs that can support multiple data sources.",
   "main": "index.js",
-  "license": "GPL-3.0-or-later",
+  "license": "GPL-3.0",
+  "repository": "https://github.com/hatfieldlibrary/oai-provider-service",
   "engines": {
     "node": ">=8.9.4"
   },
   "scripts": {
     "start": "cd dist && NODE_ENV=production node index",
-    "compile": "gulp build && gulp copy-production",
+    "compile": "gulp dist-clean && gulp build && gulp copy-production",
     "dev": "gulp build && gulp copy && cd dist && node index | pino -o 'short'",
     "test": "node build.js && mocha test/**/*.ts --exit"
   },
@@ -35,21 +36,22 @@
     "xo": "^0.18.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
     "awesome-typescript-loader": "^3.4.1",
     "backpack-core": "^0.4.3",
     "browser-sync": "^2.23.6",
-    "@types/mocha": "^2.2.48",
-    "@types/chai": "^4.1.2",
     "chai": "^4.1.2",
-    "gulp": "^3.9.1",
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
     "gulp-typescript": "^4.0.1",
     "gulp-watch": "^5.0.0",
     "mocha": "^4.0.1",
     "shelljs": "^0.7.8",
+    "source-map-support": "^0.4.15",
     "supertest": "^3.0.0",
     "ts-node": "^4.1.0",
     "tslint": "^5.3.2",
-    "source-map-support": "^0.4.15",
     "typescript": "^2.7.2"
   }
 }

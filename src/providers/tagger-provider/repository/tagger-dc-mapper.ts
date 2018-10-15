@@ -42,7 +42,7 @@ export class TaggerDcMapper implements ProviderDCMapper {
 
     private getRightsMessage(restricted: boolean): string {
         if (restricted) {
-            return "Restricted to University users."
+            return "Restricted to Willamette University users."
         }
         return "Available to the public."
     }
@@ -74,7 +74,10 @@ export class TaggerDcMapper implements ProviderDCMapper {
                                 },
                                     {'dc:title': record.title},
                                     {'dc:description': {_cdata: record.description}},
-                                    {'dc:identifier': record.url},
+                                    {'dc:identifier': 'https://libmedia.willamette.edu/commons/item/id/' +
+                                        record.id},
+                                    {'dc:url': 'https://libmedia.willamette.edu/commons/item/id/' +
+                                        record.id},
                                     {'dc:source': record.category},
                                     {'dc:rights': this.getRightsMessage(record.restricted)}]
                             }]
