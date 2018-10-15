@@ -23,6 +23,7 @@
  */
 
 var gulp = require("gulp");
+var del = require("del");
 var ts = require("gulp-typescript");
 
 gulp.task("build", function () {
@@ -42,8 +43,10 @@ gulp.task("copy", function() {
 
 gulp.task("copy-production", function() {
     return gulp.src(["production/.env"])
-        .pipe(gulp.dest("dist"));
+        .pipe(gulp.dest("dist/server"));
 });
-
+gulp.task("dist-clean", function() {
+    return del(["dist/**/*", "dist/server/.env"]);
+});
 
 
