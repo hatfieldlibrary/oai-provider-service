@@ -8,7 +8,7 @@ The National Library of Finland.
 This project includes a provider module for one of our local services `(tagger-provider)`. The project
  includes a second, very simple module with dummy data `(sample-provider)`.  
 
-## Dependenices
+## Dependencies
 
 * Node 8.9.4+
 * Typescript 2.7.2+
